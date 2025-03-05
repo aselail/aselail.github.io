@@ -1,0 +1,31 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  
+  h1, h2 {
+    text-align: center;
+  }
+  
+  form label, button {
+    display: block;
+    margin: 0.5rem 0;
+  }
+  
+  .error {
+    color: red;
+  }
+  
+  .view {
+    margin-top: 2rem;
+  }
+  
+  /* Center and style SVG charts */
+  #graphs svg {
+    margin: 1rem auto;
+    display: block;
+    border: 1px solid #ccc;
+  }
+  
