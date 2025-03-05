@@ -14,7 +14,7 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
         }
       });
       const data = await response.json();
-      if (data && data.token) {
+      if (response.ok && data && data.token) {
         localStorage.setItem('jwt', data.token);
         // Switch to profile view
         document.getElementById('login-view').style.display = 'none';
@@ -28,4 +28,3 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
       console.error(err);
     }
   });
-  
