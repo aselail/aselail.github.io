@@ -16,12 +16,12 @@ export async function login() {
             <h2>Login</h2>
             <form id="loginForm">
                 <div class="user-box">
-                    <input type="text" id="usrname" required="">
-                    <label for="usrname">Username</label>
+                    <input type="text" id="uname" required="">
+                    <label for="uname">Username</label>
                 </div>
                 <div class="user-box">
-                    <input type="password" id="psword" required="">
-                    <label for="psworld">Password</label>
+                    <input type="password" id="psw" required="">
+                    <label for="psw">Password</label>
                 </div>
                 <p id="errorMessage" style="color: red;"></p>
                 <button class="login-button" type="submit">Login</button>
@@ -32,8 +32,8 @@ export async function login() {
     // Handle form submission
     document.getElementById('loginForm').addEventListener('submit', async function (e) {
         e.preventDefault(); 
-        const username = document.getElementById('usrname').value;
-        const password = document.getElementById('psworld').value;
+        const username = document.getElementById('uname').value;
+        const password = document.getElementById('psw').value;
         const errorMessage = document.getElementById('errorMessage');
         try {
             const credentials = btoa(`${username}:${password}`);

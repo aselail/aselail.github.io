@@ -2,10 +2,6 @@ import {pullData} from "./data.js";
 import {logout} from "./logout.js";
 import { renderTransactionBarChart, renderPieChart } from "./chartRender.js";
 
-
-
-
-
 export async function profile() {
     try {
         const userData = await pullData(userQury); 
@@ -110,4 +106,3 @@ const skillQury = `
         }
     }
 `;
-

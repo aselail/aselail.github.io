@@ -1,66 +1,131 @@
-// chartRender.js
+import { formatXP } from "./data.js";
 
-// Render a bar chart for XP transactions
-function renderXPChart(transactions) {
-    if (!transactions.length) {
-      document.getElementById('graphs').innerHTML += '<h2>No XP Data Available</h2>';
-      return;
-    }
+// Function to render the transaction bar chart
+export function renderTransactionBarChart(up, down) {
+    const barSvg = document.getElementById('transactionBarChart');
+    const width = 400, height = 300, padding = 50;
+    const barWidth = (width - 2 * padding) / 2;
+    const maxBarHeight = height - 2 * padding;
+    const total = Math.max(up, down);
+    const upHeight = (up / total) * maxBarHeight;
+    const downHeight = (down / total) * maxBarHeight;
+    barSvg.innerHTML = "";
+    const upBar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    upBar.setAttribute('x', padding);
+    upBar.setAttribute('y', height - padding - upHeight);
+    upBar.setAttribute('width', barWidth - 10);
+    upBar.setAttribute('height', upHeight);
+    upBar.setAttribute('fill', 'blue');
+    barSvg.appendChild(upBar);
+    const downBar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    downBar.setAttribute('x', padding + barWidth + 10);
+    downBar.setAttribute('y', height - padding - downHeight);
+    downBar.setAttribute('width', barWidth - 10);
+    downBar.setAttribute('height', downHeight);
+    downBar.setAttribute('fill', 'red');
+    barSvg.appendChild(downBar);
+    const upLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    upLabel.setAttribute('x', padding + (barWidth / 2) - 5);
+    upLabel.setAttribute('y', height - padding + 20);
+    upLabel.setAttribute('text-anchor', 'middle');
+    upLabel.setAttribute('fill', '#28a745');  // Green color
+    upLabel.style.fontWeight = 'bold';
+    upLabel.textContent = 'Done';
+    barSvg.appendChild(upLabel);
+    const downLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    downLabel.setAttribute('x', padding + barWidth + (barWidth / 2) + 5);
+    downLabel.setAttribute('y', height - padding + 20);
+    downLabel.setAttribute('text-anchor', 'middle');
+    downLabel.setAttribute('fill', '#ff8800');  // Orange color
+    downLabel.style.fontWeight = 'bold';
+    downLabel.textContent = 'Received' ;
+    const upNumber = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    upNumber.setAttribute('x', padding + (barWidth / 2) - 5);
+    upNumber.setAttribute('y', height - padding - upHeight - 10);
+    upNumber.setAttribute('text-anchor', 'middle');
+    upNumber.setAttribute('fill', '#28a745');  // Green color
+    upNumber.style.fontWeight = 'bold';
+    upNumber.textContent = formatXP(up);
+    barSvg.appendChild(upNumber);
+
+    const downNumber = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    downNumber.setAttribute('x', padding + barWidth + (barWidth / 2) + 5);
+    downNumber.setAttribute('y', height - padding - downHeight - 10);
+    downNumber.setAttribute('text-anchor', 'middle');
+    downNumber.setAttribute('fill', '#ff8800');  // Orange color
+    downNumber.style.fontWeight = 'bold';
+    downNumber.textContent = formatXP(down);
+    barSvg.appendChild(downNumber);
+    barSvg.appendChild(downLabel);
+}
+// Function to render the pie chart for skills distribution 
+export function renderPieChart(skillData) {
+    const skills = Object.values(skillData.transaction).reduce((result, current) => {
+        const existing = result.find((item) => item.type === current.type);
+        if (!existing) {
+            result.push(current); // Add the item if it doesn't exist
+        } else if (current.amount > existing.amount) {
+            existing.amount = current.amount; // Update the amount if it's larger
+        }
+        return result;
+    }, []);
+
     
-    // Sort transactions by date
-    transactions.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-    const xpData = transactions.map(t => t.amount);
+   const skillLabels  = skills.map(item => item.type);
+   const skillAmounts = skills.map(item => item.amount);
+
+    const pieSvg = document.getElementById('skillsPieChart');
+    const pieRadius = 200;
+    pieSvg.setAttribute('viewBox', `0 0 ${pieRadius * 2} ${pieRadius * 2}`);
+    pieSvg.setAttribute('width', pieRadius * 2);
+    pieSvg.setAttribute('height', pieRadius * 2);
+    const pieCenter = { x: pieRadius, y: pieRadius };
+    const pieTotal = skillAmounts.reduce((a, b) => a + b, 0);
+    let startAngle = 0;
+    const skillsLegendDiv = document.getElementById('skillsLegend');
+    skillsLegendDiv.style.display = 'flex';
+    skillsLegendDiv.style.flexDirection = 'column';
+    skillsLegendDiv.style.marginTop = '10px';
     
-    const svgWidth = 400;
-    const svgHeight = 200;
-    const barWidth = svgWidth / xpData.length;
-    let svgContent = `<svg width="${svgWidth}" height="${svgHeight}">`;
-    
-    xpData.forEach((xp, index) => {
-      const barHeight = (xp / Math.max(...xpData)) * svgHeight;
-      const x = index * barWidth;
-      const y = svgHeight - barHeight;
-      svgContent += `<rect x="${x + 10}" y="${y}" width="${barWidth - 20}" height="${barHeight}" fill="#4287f5"></rect>
-                     <text x="${x + (barWidth / 2)}" y="${y - 5}" font-size="12" text-anchor="middle">${xp}</text>`;
+    skillAmounts.forEach((amount, index) => {
+        const endAngle = startAngle + (2 * Math.PI * (amount / pieTotal));
+        const x1 = pieCenter.x + pieRadius * Math.cos(startAngle);
+        const y1 = pieCenter.y + pieRadius * Math.sin(startAngle);
+        const x2 = pieCenter.x + pieRadius * Math.cos(endAngle);
+        const y2 = pieCenter.y + pieRadius * Math.sin(endAngle);
+        const largeArc = endAngle - startAngle > Math.PI ? 1 : 0;
+        const pathData = `
+            M ${pieCenter.x} ${pieCenter.y}
+            L ${x1} ${y1}
+            A ${pieRadius} ${pieRadius} 0 ${largeArc} 1 ${x2} ${y2}
+            Z
+        `;
+        const color = `hsl(${(index / skillAmounts.length) * 360}, 70%, 50%)`;
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', pathData);
+        path.setAttribute('fill', color);
+        path.setAttribute('stroke', 'white');
+        path.setAttribute('stroke-width', '1');
+        pieSvg.appendChild(path);
+        
+        const legendItem = document.createElement('div');
+        legendItem.style.display = 'flex';
+        legendItem.style.alignItems = 'center';
+        legendItem.style.marginBottom = '5px';
+        
+        const legendColor = document.createElement('span');
+        legendColor.style.width = '20px';
+        legendColor.style.height = '20px';
+        legendColor.style.backgroundColor = color;
+        legendColor.style.marginRight = '10px';
+        
+        const legendText = document.createElement('span');
+        // Ensure the amount is treated as a number
+        legendText.textContent = `${skillLabels[index]}: ${Number(amount)}`;
+        legendItem.appendChild(legendColor);
+        legendItem.appendChild(legendText);
+        skillsLegendDiv.appendChild(legendItem);
+        
+        startAngle = endAngle;
     });
-    svgContent += '</svg>';
-    document.getElementById('graphs').innerHTML += `<h2>XP Earned Over Time</h2>` + svgContent;
-  }
-  
-  // Render a pie chart for progress (PASS/FAIL ratio)
-  function renderProgressChart(progressData) {
-    if (!progressData.length) {
-      document.getElementById('graphs').innerHTML += '<h2>No Progress Data Available</h2>';
-      return;
-    }
-  
-    // Count PASS (grade === 1) vs FAIL (grade !== 1)
-    let passCount = 0, failCount = 0;
-    progressData.forEach(item => {
-      if (item.grade === 1) {
-        passCount++;
-      } else {
-        failCount++;
-      }
-    });
-    const total = passCount + failCount;
-    if (total === 0) return;
-  
-    const passRatio = (passCount / total) * 100;
-    const radius = 50;
-    const circumference = 2 * Math.PI * radius;
-    const passStroke = (passRatio / 100) * circumference;
-    const failStroke = circumference - passStroke;
-  
-    const svgContent = `
-      <svg width="150" height="150">
-        <circle cx="75" cy="75" r="${radius}" fill="none" stroke="#4287f5" stroke-width="30"
-          stroke-dasharray="${passStroke} ${failStroke}" transform="rotate(-90 75 75)" />
-        <circle cx="75" cy="75" r="${radius}" fill="none" stroke="red" stroke-width="30"
-          stroke-dasharray="${failStroke} ${passStroke}" transform="rotate(${passRatio / 100 * 360 - 90} 75 75)" />
-        <text x="75" y="80" text-anchor="middle" font-size="16">${passCount} / ${total}</text>
-      </svg>
-    `;
-    document.getElementById('graphs').innerHTML += `<h2>Progress Overview</h2>` + svgContent;
-  }
-  
+}
