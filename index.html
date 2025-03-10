@@ -1,50 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Profile App</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>graphsql</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Main application container -->
-  <div id="app">
-    <!-- Login View -->
-    <div id="login-view" class="view">
-      <h1>Login</h1>
-      <form id="login-form">
-        <label>
-          Username or Email:
-          <input type="text" id="identifier" required />
-        </label>
-        <label>
-          Password:
-          <input type="password" id="password" required />
-        </label>
-        <button type="submit">Login</button>
-      </form>
-      <div id="login-error" class="error"></div>
-    </div>
-
-    <!-- Profile View -->
-    <div id="profile-view" class="view" style="display: none;">
-      <h1>Your Profile</h1>
-      <button id="logout-btn">Logout</button>
-      <section id="profile-data">
-        <!-- User info will be loaded here -->
-      </section>
-      <section id="graphs">
-        <!-- SVG charts will be rendered here -->
-      </section>
-    </div>
-  </div>
-
-  <!-- Load JavaScript files -->
-  <script src="js/app.js"></script>
-  <script src="js/login.js"></script>
-  <script src="js/logout.js"></script>
-  <script src="js/profile.js"></script>
-  <script src="js/data.js"></script>
-  <script src="js/chartRender.js"></script>
-  <script src="js/quries.js"></script>
+   <script type="module" src="script/app.js"></script>
 </body>
 </html>

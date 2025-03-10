@@ -1,45 +1,113 @@
-// profile.js
+import {pullData} from "./data.js";
+import {logout} from "./logout.js";
+import { renderTransactionBarChart, renderPieChart } from "./chartRender.js";
 
-// Main function to load profile data and charts
-async function loadProfileData() {
-    await loadUserProfile();
-    await loadAndRenderCharts();
-    // Re-fetch data every 10 seconds for realtime updates
-    setInterval(async () => {
-      await loadUserProfile();
-      await loadAndRenderCharts();
-    }, 10000);
-  }
-  
-  // Load basic user profile info
-  async function loadUserProfile() {
+
+
+
+
+export async function profile() {
     try {
-      const response = await fetchGraphQL(USER_QUERY);
-      if (response.data && response.data.user && response.data.user.length > 0) {
-        const user = response.data.user[0];
-        document.getElementById('profile-data').innerHTML = `
-          <p><strong>ID:</strong> ${user.id}</p>
-          <p><strong>Login:</strong> ${user.login}</p>
+        const userData = await pullData(userQury); 
+        const user = userData.user[0];
+        const auditRatio = typeof user.auditRatio === 'number' ? user.auditRatio.toFixed(1) : 'N/A';
+        const skillsData = await pullData(skillQury)
+
+        console.log(user);
+       
+        if (!userData || userData.length === 0) {
+            console.error("No user data found");
+            logout();
+            return;
+        }
+        
+        document.body.className = '';
+        document.body.classList.add('profile-page-body');
+        document.body.innerHTML = `
+            <div class="profile-container">
+                <header>
+                    <h1>Welcome, ${user.login}</h1>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </header>
+                <section class="profile-info">
+                    <p><strong>User ID:</strong> ${user.id}</p>
+                    <p><strong>Name:</strong> ${user.firstName} ${user.lastName}</p>
+                    <p><strong>Email:</strong> ${user.email}</p>
+                    <p><strong>Campus:</strong> ${user.campus}</p>
+                    <p><strong>gender :</strong> ${user.attrs.gender}</p>
+                   
+                  
+                <section class="charts">
+                    <div class="chart-container">
+                        <h3>Skills Distribution</h3>
+                        <svg id="skillsPieChart" width="400" height="400"></svg>
+                        <div id="skillsLegend"></div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Audits Ratio: ${auditRatio}</h3>
+                        <svg id="transactionBarChart" width="400" height="300"></svg>
+                    </div>
+                </section>
+            </div>
         `;
-      }
+        renderTransactionBarChart(user.totalUp, user.totalDown);
+        renderPieChart(skillsData);
     } catch (error) {
-      console.error('Error loading user profile:', error);
+        console.error("Error in profile function:", error);
     }
-  }
-  
-  // Load data for charts and call chart render functions
-  async function loadAndRenderCharts() {
-    // Clear current charts
-    document.getElementById('graphs').innerHTML = '';
-    
-    // Load XP transactions data
-    const xpResponse = await fetchGraphQL(TRANSACTION_QUERY);
-    const xpData = xpResponse.data && xpResponse.data.transaction ? xpResponse.data.transaction : [];
-    renderXPChart(xpData);
-    
-    // Load progress data
-    const progressResponse = await fetchGraphQL(PROGRESS_QUERY);
-    const progressData = progressResponse.data && progressResponse.data.progress ? progressResponse.data.progress : [];
-    renderProgressChart(progressData);
-  }
-  
+}
+
+
+const xpQury = `
+    query Transaction {
+        transaction(order_by: { createdAt: asc }, where: { type: { _eq: "xp" }, path: { _niregex: "piscine-js/|piscine-bh"  _iregex: "bh-module"} }) {
+            amount
+            attrs
+            createdAt
+            originEventId
+            path
+            type
+        }
+    }
+`;
+
+const userQury = `
+  query User {
+        user {
+            id
+            login 
+            attrs
+            firstName
+            lastName
+            email
+            campus
+            totalUp
+            totalDown
+            auditRatio
+            progresses {
+                grade
+                path
+                updatedAt
+            }
+            transactions {
+                amount
+                type
+                path
+                createdAt
+            }
+        }
+    }
+`;
+
+const skillQury = `
+    query Transaction {
+        transaction(order_by: { createdAt: asc }, where: { type: {_iregex: "skill" }}) {
+            type
+            amount
+            attrs
+            createdAt
+            path
+        }
+    }
+`;
+

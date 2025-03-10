@@ -1,15 +1,10 @@
-// app.js
-document.addEventListener('DOMContentLoaded', () => {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
-      // Show profile view if authenticated
-      document.getElementById('login-view').style.display = 'none';
-      document.getElementById('profile-view').style.display = 'block';
-      loadProfileData();
-    } else {
-      // Otherwise, show login view
-      document.getElementById('login-view').style.display = 'block';
-      document.getElementById('profile-view').style.display = 'none';
-    }
-  });
-  
+import { login } from "./login.js";
+import { profile } from "./profile.js";
+
+const jwt = localStorage.getItem('authToken');
+// Check if the user is logged in
+if (!jwt) {
+    login();
+} else {
+    profile();
+}
