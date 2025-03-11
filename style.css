@@ -118,8 +118,8 @@ html, body {
 }
 
 .profile-container {
-  width: 100%;
-  max-width: 1100px;
+  width: 150%;
+  max-width: 1867px;
   background-color: var(--box-color);
   padding: 30px;
   box-shadow: var(--box-shadow);
@@ -172,9 +172,31 @@ h1 {
   flex-wrap: wrap;
 }
 
-.chart-container {
+.skill-chart-container {
   flex: 1;
   min-width: 300px;
+  background-color: var(--box-color);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  text-align: center;
+}
+
+.audit-chart-container {
+  flex: 1;
+  min-width: 300px;
+  min-height: auto;
+  background-color: var(--box-color);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  text-align: center;
+}
+
+.xp-chart-container {
+  flex: 1;
+  min-width: 300px;
+  min-height: auto;
   background-color: var(--box-color);
   padding: 20px;
   border-radius: 8px;
