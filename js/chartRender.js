@@ -199,5 +199,42 @@ export function renderXPLineChart(xpData) {
         lineSvg.appendChild(text);
     });
     
-    // Optionally, add simple axes or labels if desired.
+    // Add x-axis labels: display first, middle, and last date
+    const firstDate = new Date(timeStart);
+    const midDate = new Date((timeStart + timeEnd) / 2);
+    const lastDate = new Date(timeEnd);
+    const xAxisDates = [firstDate, midDate, lastDate];
+    const xAxisPositions = [
+        xScale(timeStart),
+        xScale((timeStart + timeEnd) / 2),
+        xScale(timeEnd)
+    ];
+    
+    xAxisDates.forEach((date, index) => {
+        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        label.setAttribute('x', xAxisPositions[index]);
+        label.setAttribute('y', height - margin + 20);
+        label.setAttribute('text-anchor', 'middle');
+        label.setAttribute('font-size', '10');
+        label.setAttribute('fill', '#333');
+        label.textContent = date.toLocaleDateString();
+        lineSvg.appendChild(label);
+    });
+    
+    // Add y-axis labels for max and min XP values
+    const yAxisValues = [maxXP, minXP]; // top (max) and bottom (min)
+    const yAxisPositions = [yScale(maxXP), yScale(minXP)];
+    
+    yAxisValues.forEach((val, index) => {
+        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        // Position label to the left of the chart area
+        label.setAttribute('x', margin - 10);
+        label.setAttribute('y', yAxisPositions[index] + 5);
+        label.setAttribute('text-anchor', 'end');
+        label.setAttribute('font-size', '10');
+        label.setAttribute('fill', '#333');
+        label.textContent = formatXP(val);
+        lineSvg.appendChild(label);
+    });
+    
 }
