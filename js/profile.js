@@ -42,7 +42,7 @@ export async function profile() {
                         <svg id="skillsPieChart" width="400" height="400"></svg>
                         <div id="skillsLegend"></div>
                     </div>
-                    <div class="Audit-chart-container">
+                    <div class="audit-chart-container">
                         <h3>Audits Ratio: ${auditRatio}</h3>
                         <svg id="transactionBarChart" width="400" height="300"></svg>
                     </div>
