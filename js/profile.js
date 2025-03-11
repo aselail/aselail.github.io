@@ -43,14 +43,14 @@ export async function profile() {
                         <h3>Audits Ratio: ${auditRatio}</h3>
                         <svg id="transactionBarChart" width="400" height="300"></svg>
                     </div>
-                    <div class="xpChartContainer">
-                    <svg id="xpLineChart" width="500" height="300"></svg>
+                    <div class="chart-container">
+                    <svg id="xpLineChart"></svg>
                 </section>
             </div>
         `;
         renderTransactionBarChart(user.totalUp, user.totalDown);
         renderPieChart(skillsData);
-        renderXPLineChart(xpQury);
+        renderXPLineChart(xpData);
     } catch (error) {
         console.error("Error in profile function:", error);
     }
