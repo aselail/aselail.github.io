@@ -129,3 +129,75 @@ export function renderPieChart(skillData) {
         startAngle = endAngle;
     });
 }
+
+// Function to render XP progression as a line chart
+export function renderXPLineChart(xpData) {
+    // Sort data by createdAt date
+    xpData.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+    // Define SVG dimensions and margins
+    const width = 500, height = 300, margin = 50;
+    
+    // Create or select the SVG container
+    const lineSvg = document.getElementById('xpLineChart');
+    lineSvg.innerHTML = "";
+    lineSvg.setAttribute('width', width);
+    lineSvg.setAttribute('height', height);
+    
+    // Determine minimum and maximum XP values
+    const amounts = xpData.map(d => d.amount);
+    const minXP = Math.min(...amounts);
+    const maxXP = Math.max(...amounts);
+    
+    // Define the drawing area dimensions
+    const chartWidth = width - 2 * margin;
+    const chartHeight = height - 2 * margin;
+    
+    // Create scales for X and Y axes
+    const timeStart = new Date(xpData[0].createdAt).getTime();
+    const timeEnd = new Date(xpData[xpData.length - 1].createdAt).getTime();
+    // Function to scale dates to x positions
+    const xScale = (date) => {
+        const t = new Date(date).getTime();
+        return margin + ((t - timeStart) / (timeEnd - timeStart)) * chartWidth;
+    };
+    // Function to scale XP to y positions (inverted y: higher XP appears higher)
+    const yScale = (xp) => {
+        return margin + chartHeight - ((xp - minXP) / (maxXP - minXP)) * chartHeight;
+    };
+    
+    // Construct the polyline points from the XP data
+    const points = xpData.map(d => `${xScale(d.createdAt)},${yScale(d.amount)}`).join(" ");
+    
+    // Create the polyline element for the line chart
+    const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    polyline.setAttribute('points', points);
+    polyline.setAttribute('fill', 'none');
+    polyline.setAttribute('stroke', '#007bff');
+    polyline.setAttribute('stroke-width', '2');
+    lineSvg.appendChild(polyline);
+    
+    // Add circles for each data point to emphasize them
+    xpData.forEach(d => {
+        const cx = xScale(d.createdAt);
+        const cy = yScale(d.amount);
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', cx);
+        circle.setAttribute('cy', cy);
+        circle.setAttribute('r', 4);
+        circle.setAttribute('fill', '#007bff');
+        lineSvg.appendChild(circle);
+        
+        // Optionally, display the formatted XP amount above each point
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', cx);
+        text.setAttribute('y', cy - 8);
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('font-size', '10');
+        text.setAttribute('fill', '#333');
+        text.textContent = formatXP(d.amount);
+        lineSvg.appendChild(text);
+    });
+    
+    // Optionally, add simple axes or labels if desired.
+}
