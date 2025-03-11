@@ -8,6 +8,9 @@ export async function profile() {
         const user = userData.user[0];
         const auditRatio = typeof user.auditRatio === 'number' ? user.auditRatio.toFixed(1) : 'N/A';
         const skillsData = await pullData(skillQury)
+        const xpDataResult = await pullData(xpQury); 
+        const xpData = xpDataResult.transaction; 
+
 
         console.log(user);
        
