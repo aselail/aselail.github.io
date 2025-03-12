@@ -215,17 +215,17 @@ h1 {
   margin-bottom: 15px;
 }
 
-svg .skillsPieChart  {
+.skillsPieChart svg  {
   width: 100%;
   height: auto;
 }
 
-svg .auditPieChart {
+.transactionBarChart svg {
   width: 100%;
   height: auto;
 }
 
-svg .xpPieChart {
+.xpPieChart svg {
   width: 100%;
   height: auto;
 }

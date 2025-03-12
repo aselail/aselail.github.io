@@ -47,7 +47,8 @@ export async function profile() {
                         <svg id="transactionBarChart" width="400" height="300"></svg>
                     </div>
                     <div class="xp-chart-container">
-                    <svg id="xpLineChart"></svg>
+                    <h3>XP Line Chart</h3>
+                    <svg id="xpLineChart" width="400" height="300"></svg>
                 </section>
             </div>
         `;
