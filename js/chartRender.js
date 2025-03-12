@@ -132,13 +132,17 @@ export function renderPieChart(skillData) {
 
 // Function to render XP progression as a line chart
 export function renderXPLineChart(xpData) {
+    if (!xpData || xpData.length === 0) return;
+    
     // Sort data by createdAt date
     xpData.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
     // Define SVG dimensions and margins
     const width = 500, height = 300, margin = 50;
+    const chartWidth = width - 2 * margin;
+    const chartHeight = height - 2 * margin;
     
-    // Create or select the SVG container
+    // Select the SVG container and clear previous content
     const lineSvg = document.getElementById('xpLineChart');
     lineSvg.innerHTML = "";
     lineSvg.setAttribute('width', width);
@@ -149,26 +153,21 @@ export function renderXPLineChart(xpData) {
     const minXP = Math.min(...amounts);
     const maxXP = Math.max(...amounts);
     
-    // Define the drawing area dimensions
-    const chartWidth = width - 2 * margin;
-    const chartHeight = height - 2 * margin;
-    
-    // Create scales for X and Y axes
+    // Define time boundaries based on XP data timestamps
     const timeStart = new Date(xpData[0].createdAt).getTime();
     const timeEnd = new Date(xpData[xpData.length - 1].createdAt).getTime();
-    // Function to scale dates to x positions
+    
+    // Scale functions: x maps date to horizontal position; y maps XP to vertical position (inverted)
     const xScale = (date) => {
         const t = new Date(date).getTime();
         return margin + ((t - timeStart) / (timeEnd - timeStart)) * chartWidth;
     };
-    // Function to scale XP to y positions (inverted y: higher XP appears higher)
     const yScale = (xp) => {
         return margin + chartHeight - ((xp - minXP) / (maxXP - minXP)) * chartHeight;
     };
     
     // Construct the polyline points from the XP data
     const points = xpData.map(d => `${xScale(d.createdAt)},${yScale(d.amount)}`).join(" ");
-    
     // Create the polyline element for the line chart
     const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
     polyline.setAttribute('points', points);
@@ -177,7 +176,7 @@ export function renderXPLineChart(xpData) {
     polyline.setAttribute('stroke-width', '2');
     lineSvg.appendChild(polyline);
     
-    // Add circles for each data point to emphasize them
+    // Plot circles and XP labels for each data point
     xpData.forEach(d => {
         const cx = xScale(d.createdAt);
         const cy = yScale(d.amount);
@@ -188,7 +187,6 @@ export function renderXPLineChart(xpData) {
         circle.setAttribute('fill', '#007bff');
         lineSvg.appendChild(circle);
         
-        // Optionally, display the formatted XP amount above each point
         const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         text.setAttribute('x', cx);
         text.setAttribute('y', cy - 8);
@@ -221,13 +219,12 @@ export function renderXPLineChart(xpData) {
         lineSvg.appendChild(label);
     });
     
-    // Add y-axis labels for max and min XP values
-    const yAxisValues = [maxXP, minXP]; // top (max) and bottom (min)
+    // Add y-axis labels: display maximum and minimum XP values on the left side
+    const yAxisValues = [maxXP, minXP];
     const yAxisPositions = [yScale(maxXP), yScale(minXP)];
     
     yAxisValues.forEach((val, index) => {
         const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        // Position label to the left of the chart area
         label.setAttribute('x', margin - 10);
         label.setAttribute('y', yAxisPositions[index] + 5);
         label.setAttribute('text-anchor', 'end');
@@ -237,4 +234,22 @@ export function renderXPLineChart(xpData) {
         lineSvg.appendChild(label);
     });
     
+    // Optionally, draw x-axis and y-axis lines for clarity
+    const xAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    xAxisLine.setAttribute('x1', margin);
+    xAxisLine.setAttribute('y1', height - margin);
+    xAxisLine.setAttribute('x2', width - margin);
+    xAxisLine.setAttribute('y2', height - margin);
+    xAxisLine.setAttribute('stroke', '#333');
+    xAxisLine.setAttribute('stroke-width', '1');
+    lineSvg.appendChild(xAxisLine);
+    
+    const yAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    yAxisLine.setAttribute('x1', margin);
+    yAxisLine.setAttribute('y1', margin);
+    yAxisLine.setAttribute('x2', margin);
+    yAxisLine.setAttribute('y2', height - margin);
+    yAxisLine.setAttribute('stroke', '#333');
+    yAxisLine.setAttribute('stroke-width', '1');
+    lineSvg.appendChild(yAxisLine);
 }
