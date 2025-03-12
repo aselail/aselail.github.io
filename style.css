@@ -220,12 +220,12 @@ h1 {
   height: auto;
 }
 
-#transactionBarChart svg {
+#transactionBarChart {
   width: 100%;
   height: auto;
 }
 
-#xpPieChart svg {
+#xpPieChart {
   width: 100%;
   height: auto;
 }
