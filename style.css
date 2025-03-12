@@ -185,7 +185,7 @@ h1 {
 .audit-chart-container {
   flex: 1;
   min-width: 300px;
-  min-height: auto;
+  height: fit-content;
   background-color: var(--box-color);
   padding: 20px;
   border-radius: 8px;
@@ -209,7 +209,17 @@ h1 {
   margin-bottom: 15px;
 }
 
-svg {
+.svg .skillsPieChart  {
+  width: 100%;
+  height: auto;
+}
+
+.svg .auditPieChart {
+  width: 100%;
+  height: auto;
+}
+
+.svg .xpPieChart {
   width: 100%;
   height: auto;
 }
