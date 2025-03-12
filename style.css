@@ -200,7 +200,7 @@ h1 {
 .xp-chart-container {
   flex: 1;
   min-width: 300px;
-  min-height: auto;
+  height: 700px;
   background-color: var(--box-color);
   padding: 20px;
   border-radius: 8px;
@@ -215,17 +215,17 @@ h1 {
   margin-bottom: 15px;
 }
 
-.skillsPieChart  {
+svg .skillsPieChart  {
   width: 100%;
   height: auto;
 }
 
-.auditPieChart {
+svg .auditPieChart {
   width: 100%;
   height: auto;
 }
 
-.xpPieChart {
+svg .xpPieChart {
   width: 100%;
   height: auto;
 }
