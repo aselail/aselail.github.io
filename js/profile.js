@@ -1,6 +1,6 @@
 import {pullData} from "./data.js";
 import {logout} from "./logout.js";
-import { renderTransactionBarChart, skillsRadarChart , renderXPLineChart} from "./chartRender.js";
+import { renderTransactionBarChart, renderRadarChart , renderXPLineChart} from "./chartRender.js";
 
 export async function profile() {
     try {
@@ -53,7 +53,7 @@ export async function profile() {
             </div>
         `;
         renderTransactionBarChart(user.totalUp, user.totalDown);
-        skillsRadarChart(skillsData);
+        renderRadarChart(skillsData);
         renderXPLineChart(xpData);
     } catch (error) {
         console.error("Error in profile function:", error);
