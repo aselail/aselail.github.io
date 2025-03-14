@@ -59,76 +59,76 @@ export function renderTransactionBarChart(up, down) {
     barSvg.appendChild(downLabel);
 }
 // Function to render the pie chart for skills distribution 
-export function renderPieChart(skillData) {
-    const skills = Object.values(skillData.transaction).reduce((result, current) => {
-        const existing = result.find((item) => item.type === current.type);
-        if (!existing) {
-            result.push(current); // Add the item if it doesn't exist
-        } else if (current.amount > existing.amount) {
-            existing.amount = current.amount; // Update the amount if it's larger
-        }
-        return result;
-    }, []);
+// export function renderPieChart(skillData) {
+//     const skills = Object.values(skillData.transaction).reduce((result, current) => {
+//         const existing = result.find((item) => item.type === current.type);
+//         if (!existing) {
+//             result.push(current); // Add the item if it doesn't exist
+//         } else if (current.amount > existing.amount) {
+//             existing.amount = current.amount; // Update the amount if it's larger
+//         }
+//         return result;
+//     }, []);
 
     
-   const skillLabels  = skills.map(item => item.type);
-   const skillAmounts = skills.map(item => item.amount);
+//    const skillLabels  = skills.map(item => item.type);
+//    const skillAmounts = skills.map(item => item.amount);
 
-    const pieSvg = document.getElementById('skillsPieChart');
-    const pieRadius = 200;
-    pieSvg.setAttribute('viewBox', `0 0 ${pieRadius * 2} ${pieRadius * 2}`);
-    pieSvg.setAttribute('width', pieRadius * 2);
-    pieSvg.setAttribute('height', pieRadius * 2);
-    const pieCenter = { x: pieRadius, y: pieRadius };
-    const pieTotal = skillAmounts.reduce((a, b) => a + b, 0);
-    let startAngle = 0;
-    const skillsLegendDiv = document.getElementById('skillsLegend');
-    skillsLegendDiv.style.display = 'flex';
-    skillsLegendDiv.style.flexDirection = 'column';
-    skillsLegendDiv.style.marginTop = '10px';
+//     const pieSvg = document.getElementById('skillsPieChart');
+//     const pieRadius = 200;
+//     pieSvg.setAttribute('viewBox', `0 0 ${pieRadius * 2} ${pieRadius * 2}`);
+//     pieSvg.setAttribute('width', pieRadius * 2);
+//     pieSvg.setAttribute('height', pieRadius * 2);
+//     const pieCenter = { x: pieRadius, y: pieRadius };
+//     const pieTotal = skillAmounts.reduce((a, b) => a + b, 0);
+//     let startAngle = 0;
+//     const skillsLegendDiv = document.getElementById('skillsLegend');
+//     skillsLegendDiv.style.display = 'flex';
+//     skillsLegendDiv.style.flexDirection = 'column';
+//     skillsLegendDiv.style.marginTop = '10px';
     
-    skillAmounts.forEach((amount, index) => {
-        const endAngle = startAngle + (2 * Math.PI * (amount / pieTotal));
-        const x1 = pieCenter.x + pieRadius * Math.cos(startAngle);
-        const y1 = pieCenter.y + pieRadius * Math.sin(startAngle);
-        const x2 = pieCenter.x + pieRadius * Math.cos(endAngle);
-        const y2 = pieCenter.y + pieRadius * Math.sin(endAngle);
-        const largeArc = endAngle - startAngle > Math.PI ? 1 : 0;
-        const pathData = `
-            M ${pieCenter.x} ${pieCenter.y}
-            L ${x1} ${y1}
-            A ${pieRadius} ${pieRadius} 0 ${largeArc} 1 ${x2} ${y2}
-            Z
-        `;
-        const color = `hsl(${(index / skillAmounts.length) * 360}, 70%, 50%)`;
-        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('d', pathData);
-        path.setAttribute('fill', color);
-        path.setAttribute('stroke', 'white');
-        path.setAttribute('stroke-width', '1');
-        pieSvg.appendChild(path);
+//     skillAmounts.forEach((amount, index) => {
+//         const endAngle = startAngle + (2 * Math.PI * (amount / pieTotal));
+//         const x1 = pieCenter.x + pieRadius * Math.cos(startAngle);
+//         const y1 = pieCenter.y + pieRadius * Math.sin(startAngle);
+//         const x2 = pieCenter.x + pieRadius * Math.cos(endAngle);
+//         const y2 = pieCenter.y + pieRadius * Math.sin(endAngle);
+//         const largeArc = endAngle - startAngle > Math.PI ? 1 : 0;
+//         const pathData = `
+//             M ${pieCenter.x} ${pieCenter.y}
+//             L ${x1} ${y1}
+//             A ${pieRadius} ${pieRadius} 0 ${largeArc} 1 ${x2} ${y2}
+//             Z
+//         `;
+//         const color = `hsl(${(index / skillAmounts.length) * 360}, 70%, 50%)`;
+//         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+//         path.setAttribute('d', pathData);
+//         path.setAttribute('fill', color);
+//         path.setAttribute('stroke', 'white');
+//         path.setAttribute('stroke-width', '1');
+//         pieSvg.appendChild(path);
         
-        const legendItem = document.createElement('div');
-        legendItem.style.display = 'flex';
-        legendItem.style.alignItems = 'center';
-        legendItem.style.marginBottom = '5px';
+//         const legendItem = document.createElement('div');
+//         legendItem.style.display = 'flex';
+//         legendItem.style.alignItems = 'center';
+//         legendItem.style.marginBottom = '5px';
         
-        const legendColor = document.createElement('span');
-        legendColor.style.width = '20px';
-        legendColor.style.height = '20px';
-        legendColor.style.backgroundColor = color;
-        legendColor.style.marginRight = '10px';
+//         const legendColor = document.createElement('span');
+//         legendColor.style.width = '20px';
+//         legendColor.style.height = '20px';
+//         legendColor.style.backgroundColor = color;
+//         legendColor.style.marginRight = '10px';
         
-        const legendText = document.createElement('span');
-        // Ensure the amount is treated as a number
-        legendText.textContent = `${skillLabels[index]}: ${Number(amount)}`;
-        legendItem.appendChild(legendColor);
-        legendItem.appendChild(legendText);
-        skillsLegendDiv.appendChild(legendItem);
+//         const legendText = document.createElement('span');
+//         // Ensure the amount is treated as a number
+//         legendText.textContent = `${skillLabels[index]}: ${Number(amount)}`;
+//         legendItem.appendChild(legendColor);
+//         legendItem.appendChild(legendText);
+//         skillsLegendDiv.appendChild(legendItem);
         
-        startAngle = endAngle;
-    });
-}
+//         startAngle = endAngle;
+//     });
+// }
 
 // Function to render XP progression as a line chart
 export function renderXPLineChart(xpData) {
@@ -252,4 +252,102 @@ export function renderXPLineChart(xpData) {
     yAxisLine.setAttribute('stroke', '#333');
     yAxisLine.setAttribute('stroke-width', '1');
     lineSvg.appendChild(yAxisLine);
+}
+
+export function renderRadarChart(skillData) {
+    // Aggregate skills: for each skill type, use the maximum amount
+    const skillsArray = Object.values(skillData.transaction).reduce((result, current) => {
+        const existing = result.find(item => item.type === current.type);
+        if (!existing) {
+            result.push(current);
+        } else if (current.amount > existing.amount) {
+            existing.amount = current.amount;
+        }
+        return result;
+    }, []);
+    
+    const skillLabels = skillsArray.map(item => item.type);
+    const skillAmounts = skillsArray.map(item => Number(item.amount));
+
+    // Determine the maximum value among skills for scaling
+    const maxValue = Math.max(...skillAmounts);
+
+    // Radar chart dimensions and center
+    const size = 400; // width and height of the SVG
+    const centerX = size / 2;
+    const centerY = size / 2;
+    const chartRadius = size / 2 - 40; // leave some margin for labels
+
+    // Select the SVG container and clear previous content
+    const radarSvg = document.getElementById('skillsRadarChart');
+    radarSvg.innerHTML = "";
+    radarSvg.setAttribute('width', size);
+    radarSvg.setAttribute('height', size);
+
+    const numAxes = skillLabels.length;
+    const angleSlice = (Math.PI * 2) / numAxes;
+    const gridLevels = 5; // number of concentric circles
+
+    // Draw concentric grid circles
+    for (let level = 1; level <= gridLevels; level++) {
+        const levelRadius = chartRadius * (level / gridLevels);
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', centerX);
+        circle.setAttribute('cy', centerY);
+        circle.setAttribute('r', levelRadius);
+        circle.setAttribute('fill', 'none');
+        circle.setAttribute('stroke', '#ccc');
+        circle.setAttribute('stroke-width', '0.5');
+        radarSvg.appendChild(circle);
+    }
+
+    // Draw axis lines and add labels for each skill
+    for (let i = 0; i < numAxes; i++) {
+        const angle = i * angleSlice - Math.PI / 2; // start at the top
+        const x = centerX + chartRadius * Math.cos(angle);
+        const y = centerY + chartRadius * Math.sin(angle);
+
+        // Draw axis line from center to outer edge
+        const axisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        axisLine.setAttribute('x1', centerX);
+        axisLine.setAttribute('y1', centerY);
+        axisLine.setAttribute('x2', x);
+        axisLine.setAttribute('y2', y);
+        axisLine.setAttribute('stroke', '#ccc');
+        axisLine.setAttribute('stroke-width', '0.5');
+        radarSvg.appendChild(axisLine);
+
+        // Calculate label position (push it a bit further out)
+        const labelOffset = 15;
+        const labelX = centerX + (chartRadius + labelOffset) * Math.cos(angle);
+        const labelY = centerY + (chartRadius + labelOffset) * Math.sin(angle);
+
+        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        label.setAttribute('x', labelX);
+        label.setAttribute('y', labelY);
+        label.setAttribute('text-anchor', 'middle');
+        label.setAttribute('font-size', '12');
+        label.setAttribute('fill', '#333');
+        label.textContent = skillLabels[i];
+        radarSvg.appendChild(label);
+    }
+
+    // Compute the points for the radar polygon
+    let polygonPoints = "";
+    for (let i = 0; i < numAxes; i++) {
+        // Normalize the value relative to the maximum
+        const norm = skillAmounts[i] / maxValue;
+        const angle = i * angleSlice - Math.PI / 2;
+        const x = centerX + chartRadius * norm * Math.cos(angle);
+        const y = centerY + chartRadius * norm * Math.sin(angle);
+        polygonPoints += `${x},${y} `;
+    }
+
+    // Draw the radar polygon
+    const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    polygon.setAttribute('points', polygonPoints.trim());
+    polygon.setAttribute('fill', 'rgba(0, 123, 255, 0.5)'); // semi-transparent blue
+    polygon.setAttribute('stroke', '#007bff');
+    polygon.setAttribute('stroke-width', '2');
+    radarSvg.appendChild(polygon);
 }

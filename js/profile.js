@@ -1,6 +1,6 @@
 import {pullData} from "./data.js";
 import {logout} from "./logout.js";
-import { renderTransactionBarChart, renderPieChart , renderXPLineChart} from "./chartRender.js";
+import { renderTransactionBarChart, skillsRadarChart , renderXPLineChart} from "./chartRender.js";
 
 export async function profile() {
     try {
@@ -39,7 +39,7 @@ export async function profile() {
                 <section class="charts">
                     <div class="skill-chart-container">
                         <h3>Skills Distribution</h3>
-                        <svg id="skillsPieChart" width="400" height="400"></svg>
+                        <svg id="skillRadarChart" width="400" height="400"></svg>
                         <div id="skillsLegend"></div>
                     </div>
                     <div class="audit-chart-container">
@@ -53,7 +53,7 @@ export async function profile() {
             </div>
         `;
         renderTransactionBarChart(user.totalUp, user.totalDown);
-        renderPieChart(skillsData);
+        skillsRadarChart(skillsData);
         renderXPLineChart(xpData);
     } catch (error) {
         console.error("Error in profile function:", error);
