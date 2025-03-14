@@ -346,8 +346,37 @@ export function renderRadarChart(skillData) {
     // Draw the radar polygon
     const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
     polygon.setAttribute('points', polygonPoints.trim());
-    polygon.setAttribute('fill', 'rgba(0, 123, 255, 0.5)'); // semi-transparent blue
+    polygon.setAttribute('fill', 'rgba(0, 123, 255, 0.5)');
     polygon.setAttribute('stroke', '#007bff');
     polygon.setAttribute('stroke-width', '2');
     radarSvg.appendChild(polygon);
+    
+    // Generate a legend below the radar chart similar to the old skills pie chart.
+    const skillsLegendDiv = document.getElementById('skillsLegend');
+    skillsLegendDiv.innerHTML = ""; // clear previous legend content
+    skillsLegendDiv.style.display = 'flex';
+    skillsLegendDiv.style.flexDirection = 'column';
+    skillsLegendDiv.style.marginTop = '10px';
+    
+    for (let i = 0; i < numAxes; i++) {
+        // Use a color scale similar to pie chart slices.
+        const color = `hsl(${(i / numAxes) * 360}, 70%, 50%)`;
+        const legendItem = document.createElement('div');
+        legendItem.style.display = 'flex';
+        legendItem.style.alignItems = 'center';
+        legendItem.style.marginBottom = '5px';
+        
+        const legendColor = document.createElement('span');
+        legendColor.style.width = '20px';
+        legendColor.style.height = '20px';
+        legendColor.style.backgroundColor = color;
+        legendColor.style.marginRight = '10px';
+        
+        const legendText = document.createElement('span');
+        legendText.textContent = `${skillLabels[i]}: ${skillAmounts[i]}`;
+        
+        legendItem.appendChild(legendColor);
+        legendItem.appendChild(legendText);
+        skillsLegendDiv.appendChild(legendItem);
+    }
 }
