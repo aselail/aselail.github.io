@@ -59,76 +59,76 @@ export function renderTransactionBarChart(up, down) {
     barSvg.appendChild(downLabel);
 }
 // Function to render the pie chart for skills distribution 
-// export function renderPieChart(skillData) {
-//     const skills = Object.values(skillData.transaction).reduce((result, current) => {
-//         const existing = result.find((item) => item.type === current.type);
-//         if (!existing) {
-//             result.push(current); // Add the item if it doesn't exist
-//         } else if (current.amount > existing.amount) {
-//             existing.amount = current.amount; // Update the amount if it's larger
-//         }
-//         return result;
-//     }, []);
+export function renderPieChart(skillData) {
+    const skills = Object.values(skillData.transaction).reduce((result, current) => {
+        const existing = result.find((item) => item.type === current.type);
+        if (!existing) {
+            result.push(current); // Add the item if it doesn't exist
+        } else if (current.amount > existing.amount) {
+            existing.amount = current.amount; // Update the amount if it's larger
+        }
+        return result;
+    }, []);
 
     
-//    const skillLabels  = skills.map(item => item.type);
-//    const skillAmounts = skills.map(item => item.amount);
+   const skillLabels  = skills.map(item => item.type);
+   const skillAmounts = skills.map(item => item.amount);
 
-//     const pieSvg = document.getElementById('skillsPieChart');
-//     const pieRadius = 200;
-//     pieSvg.setAttribute('viewBox', `0 0 ${pieRadius * 2} ${pieRadius * 2}`);
-//     pieSvg.setAttribute('width', pieRadius * 2);
-//     pieSvg.setAttribute('height', pieRadius * 2);
-//     const pieCenter = { x: pieRadius, y: pieRadius };
-//     const pieTotal = skillAmounts.reduce((a, b) => a + b, 0);
-//     let startAngle = 0;
-//     const skillsLegendDiv = document.getElementById('skillsLegend');
-//     skillsLegendDiv.style.display = 'flex';
-//     skillsLegendDiv.style.flexDirection = 'column';
-//     skillsLegendDiv.style.marginTop = '10px';
+    const pieSvg = document.getElementById('skillsPieChart');
+    const pieRadius = 200;
+    pieSvg.setAttribute('viewBox', `0 0 ${pieRadius * 2} ${pieRadius * 2}`);
+    pieSvg.setAttribute('width', pieRadius * 2);
+    pieSvg.setAttribute('height', pieRadius * 2);
+    const pieCenter = { x: pieRadius, y: pieRadius };
+    const pieTotal = skillAmounts.reduce((a, b) => a + b, 0);
+    let startAngle = 0;
+    const skillsLegendDiv = document.getElementById('skillsLegend');
+    skillsLegendDiv.style.display = 'flex';
+    skillsLegendDiv.style.flexDirection = 'column';
+    skillsLegendDiv.style.marginTop = '10px';
     
-//     skillAmounts.forEach((amount, index) => {
-//         const endAngle = startAngle + (2 * Math.PI * (amount / pieTotal));
-//         const x1 = pieCenter.x + pieRadius * Math.cos(startAngle);
-//         const y1 = pieCenter.y + pieRadius * Math.sin(startAngle);
-//         const x2 = pieCenter.x + pieRadius * Math.cos(endAngle);
-//         const y2 = pieCenter.y + pieRadius * Math.sin(endAngle);
-//         const largeArc = endAngle - startAngle > Math.PI ? 1 : 0;
-//         const pathData = `
-//             M ${pieCenter.x} ${pieCenter.y}
-//             L ${x1} ${y1}
-//             A ${pieRadius} ${pieRadius} 0 ${largeArc} 1 ${x2} ${y2}
-//             Z
-//         `;
-//         const color = `hsl(${(index / skillAmounts.length) * 360}, 70%, 50%)`;
-//         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-//         path.setAttribute('d', pathData);
-//         path.setAttribute('fill', color);
-//         path.setAttribute('stroke', 'white');
-//         path.setAttribute('stroke-width', '1');
-//         pieSvg.appendChild(path);
+    skillAmounts.forEach((amount, index) => {
+        const endAngle = startAngle + (2 * Math.PI * (amount / pieTotal));
+        const x1 = pieCenter.x + pieRadius * Math.cos(startAngle);
+        const y1 = pieCenter.y + pieRadius * Math.sin(startAngle);
+        const x2 = pieCenter.x + pieRadius * Math.cos(endAngle);
+        const y2 = pieCenter.y + pieRadius * Math.sin(endAngle);
+        const largeArc = endAngle - startAngle > Math.PI ? 1 : 0;
+        const pathData = `
+            M ${pieCenter.x} ${pieCenter.y}
+            L ${x1} ${y1}
+            A ${pieRadius} ${pieRadius} 0 ${largeArc} 1 ${x2} ${y2}
+            Z
+        `;
+        const color = `hsl(${(index / skillAmounts.length) * 360}, 70%, 50%)`;
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', pathData);
+        path.setAttribute('fill', color);
+        path.setAttribute('stroke', 'white');
+        path.setAttribute('stroke-width', '1');
+        pieSvg.appendChild(path);
         
-//         const legendItem = document.createElement('div');
-//         legendItem.style.display = 'flex';
-//         legendItem.style.alignItems = 'center';
-//         legendItem.style.marginBottom = '5px';
+        const legendItem = document.createElement('div');
+        legendItem.style.display = 'flex';
+        legendItem.style.alignItems = 'center';
+        legendItem.style.marginBottom = '5px';
         
-//         const legendColor = document.createElement('span');
-//         legendColor.style.width = '20px';
-//         legendColor.style.height = '20px';
-//         legendColor.style.backgroundColor = color;
-//         legendColor.style.marginRight = '10px';
+        const legendColor = document.createElement('span');
+        legendColor.style.width = '20px';
+        legendColor.style.height = '20px';
+        legendColor.style.backgroundColor = color;
+        legendColor.style.marginRight = '10px';
         
-//         const legendText = document.createElement('span');
-//         // Ensure the amount is treated as a number
-//         legendText.textContent = `${skillLabels[index]}: ${Number(amount)}`;
-//         legendItem.appendChild(legendColor);
-//         legendItem.appendChild(legendText);
-//         skillsLegendDiv.appendChild(legendItem);
+        const legendText = document.createElement('span');
+        // Ensure the amount is treated as a number
+        legendText.textContent = `${skillLabels[index]}: ${Number(amount)}`;
+        legendItem.appendChild(legendColor);
+        legendItem.appendChild(legendText);
+        skillsLegendDiv.appendChild(legendItem);
         
-//         startAngle = endAngle;
-//     });
-// }
+        startAngle = endAngle;
+    });
+}
 
 // Function to render XP progression as a line chart
 export function renderXPLineChart(xpData) {
