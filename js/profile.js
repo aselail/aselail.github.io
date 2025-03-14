@@ -39,7 +39,7 @@ export async function profile() {
                 <section class="charts">
                     <div class="skill-chart-container">
                         <h3>Skills Distribution</h3>
-                        <svg id="skillRadarChart" width="400" height="400"></svg>
+                        <svg id="renderRadarChart" width="400" height="400"></svg>
                         <div id="skillsLegend"></div>
                     </div>
                     <div class="audit-chart-container">
