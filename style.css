@@ -215,7 +215,7 @@ h1 {
   margin-bottom: 15px;
 }
 
-#renderRadarChart,
+#skillsRadarChart,
 #transactionBarChart,
 #xpLineChart {
   width: 100%;
