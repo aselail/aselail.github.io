@@ -58,77 +58,77 @@ export function renderTransactionBarChart(up, down) {
     barSvg.appendChild(downNumber);
     barSvg.appendChild(downLabel);
 }
-// Function to render the pie chart for skills distribution 
-export function renderPieChart(skillData) {
-    const skills = Object.values(skillData.transaction).reduce((result, current) => {
-        const existing = result.find((item) => item.type === current.type);
-        if (!existing) {
-            result.push(current); // Add the item if it doesn't exist
-        } else if (current.amount > existing.amount) {
-            existing.amount = current.amount; // Update the amount if it's larger
-        }
-        return result;
-    }, []);
+// // Function to render the pie chart for skills distribution 
+// export function renderPieChart(skillData) {
+//     const skills = Object.values(skillData.transaction).reduce((result, current) => {
+//         const existing = result.find((item) => item.type === current.type);
+//         if (!existing) {
+//             result.push(current); // Add the item if it doesn't exist
+//         } else if (current.amount > existing.amount) {
+//             existing.amount = current.amount; // Update the amount if it's larger
+//         }
+//         return result;
+//     }, []);
 
     
-   const skillLabels  = skills.map(item => item.type);
-   const skillAmounts = skills.map(item => item.amount);
+//    const skillLabels  = skills.map(item => item.type);
+//    const skillAmounts = skills.map(item => item.amount);
 
-    const pieSvg = document.getElementById('skillsPieChart');
-    const pieRadius = 200;
-    pieSvg.setAttribute('viewBox', `0 0 ${pieRadius * 2} ${pieRadius * 2}`);
-    pieSvg.setAttribute('width', pieRadius * 2);
-    pieSvg.setAttribute('height', pieRadius * 2);
-    const pieCenter = { x: pieRadius, y: pieRadius };
-    const pieTotal = skillAmounts.reduce((a, b) => a + b, 0);
-    let startAngle = 0;
-    const skillsLegendDiv = document.getElementById('skillsLegend');
-    skillsLegendDiv.style.display = 'flex';
-    skillsLegendDiv.style.flexDirection = 'column';
-    skillsLegendDiv.style.marginTop = '10px';
+//     const pieSvg = document.getElementById('skillsPieChart');
+//     const pieRadius = 200;
+//     pieSvg.setAttribute('viewBox', `0 0 ${pieRadius * 2} ${pieRadius * 2}`);
+//     pieSvg.setAttribute('width', pieRadius * 2);
+//     pieSvg.setAttribute('height', pieRadius * 2);
+//     const pieCenter = { x: pieRadius, y: pieRadius };
+//     const pieTotal = skillAmounts.reduce((a, b) => a + b, 0);
+//     let startAngle = 0;
+//     const skillsLegendDiv = document.getElementById('skillsLegend');
+//     skillsLegendDiv.style.display = 'flex';
+//     skillsLegendDiv.style.flexDirection = 'column';
+//     skillsLegendDiv.style.marginTop = '10px';
     
-    skillAmounts.forEach((amount, index) => {
-        const endAngle = startAngle + (2 * Math.PI * (amount / pieTotal));
-        const x1 = pieCenter.x + pieRadius * Math.cos(startAngle);
-        const y1 = pieCenter.y + pieRadius * Math.sin(startAngle);
-        const x2 = pieCenter.x + pieRadius * Math.cos(endAngle);
-        const y2 = pieCenter.y + pieRadius * Math.sin(endAngle);
-        const largeArc = endAngle - startAngle > Math.PI ? 1 : 0;
-        const pathData = `
-            M ${pieCenter.x} ${pieCenter.y}
-            L ${x1} ${y1}
-            A ${pieRadius} ${pieRadius} 0 ${largeArc} 1 ${x2} ${y2}
-            Z
-        `;
-        const color = `hsl(${(index / skillAmounts.length) * 360}, 70%, 50%)`;
-        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('d', pathData);
-        path.setAttribute('fill', color);
-        path.setAttribute('stroke', 'white');
-        path.setAttribute('stroke-width', '1');
-        pieSvg.appendChild(path);
+//     skillAmounts.forEach((amount, index) => {
+//         const endAngle = startAngle + (2 * Math.PI * (amount / pieTotal));
+//         const x1 = pieCenter.x + pieRadius * Math.cos(startAngle);
+//         const y1 = pieCenter.y + pieRadius * Math.sin(startAngle);
+//         const x2 = pieCenter.x + pieRadius * Math.cos(endAngle);
+//         const y2 = pieCenter.y + pieRadius * Math.sin(endAngle);
+//         const largeArc = endAngle - startAngle > Math.PI ? 1 : 0;
+//         const pathData = `
+//             M ${pieCenter.x} ${pieCenter.y}
+//             L ${x1} ${y1}
+//             A ${pieRadius} ${pieRadius} 0 ${largeArc} 1 ${x2} ${y2}
+//             Z
+//         `;
+//         const color = `hsl(${(index / skillAmounts.length) * 360}, 70%, 50%)`;
+//         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+//         path.setAttribute('d', pathData);
+//         path.setAttribute('fill', color);
+//         path.setAttribute('stroke', 'white');
+//         path.setAttribute('stroke-width', '1');
+//         pieSvg.appendChild(path);
         
-        const legendItem = document.createElement('div');
-        legendItem.style.display = 'flex';
-        legendItem.style.alignItems = 'center';
-        legendItem.style.marginBottom = '5px';
+//         const legendItem = document.createElement('div');
+//         legendItem.style.display = 'flex';
+//         legendItem.style.alignItems = 'center';
+//         legendItem.style.marginBottom = '5px';
         
-        const legendColor = document.createElement('span');
-        legendColor.style.width = '20px';
-        legendColor.style.height = '20px';
-        legendColor.style.backgroundColor = color;
-        legendColor.style.marginRight = '10px';
+//         const legendColor = document.createElement('span');
+//         legendColor.style.width = '20px';
+//         legendColor.style.height = '20px';
+//         legendColor.style.backgroundColor = color;
+//         legendColor.style.marginRight = '10px';
         
-        const legendText = document.createElement('span');
-        // Ensure the amount is treated as a number
-        legendText.textContent = `${skillLabels[index]}: ${Number(amount)}`;
-        legendItem.appendChild(legendColor);
-        legendItem.appendChild(legendText);
-        skillsLegendDiv.appendChild(legendItem);
+//         const legendText = document.createElement('span');
+//         // Ensure the amount is treated as a number
+//         legendText.textContent = `${skillLabels[index]}: ${Number(amount)}`;
+//         legendItem.appendChild(legendColor);
+//         legendItem.appendChild(legendText);
+//         skillsLegendDiv.appendChild(legendItem);
         
-        startAngle = endAngle;
-    });
-}
+//         startAngle = endAngle;
+//     });
+// }
 
 // Function to render XP progression as a line chart
 export function renderXPLineChart(xpData) {
@@ -172,7 +172,7 @@ export function renderXPLineChart(xpData) {
     const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
     polyline.setAttribute('points', points);
     polyline.setAttribute('fill', 'none');
-    polyline.setAttribute('stroke', '#007bff');
+    polyline.setAttribute('stroke', '#fff');
     polyline.setAttribute('stroke-width', '2');
     lineSvg.appendChild(polyline);
     
@@ -184,7 +184,7 @@ export function renderXPLineChart(xpData) {
         circle.setAttribute('cx', cx);
         circle.setAttribute('cy', cy);
         circle.setAttribute('r', 4);
-        circle.setAttribute('fill', '#007bff');
+        circle.setAttribute('fill', '#fff');
         lineSvg.appendChild(circle);
         
         const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -192,7 +192,7 @@ export function renderXPLineChart(xpData) {
         text.setAttribute('y', cy - 8);
         text.setAttribute('text-anchor', 'middle');
         text.setAttribute('font-size', '10');
-        text.setAttribute('fill', '#333');
+        text.setAttribute('fill', '#fff');
         text.textContent = formatXP(d.amount);
         lineSvg.appendChild(text);
     });
@@ -214,7 +214,7 @@ export function renderXPLineChart(xpData) {
         label.setAttribute('y', height - margin + 20);
         label.setAttribute('text-anchor', 'middle');
         label.setAttribute('font-size', '10');
-        label.setAttribute('fill', '#333');
+        label.setAttribute('fill', '#fff');
         label.textContent = date.toLocaleDateString();
         lineSvg.appendChild(label);
     });
@@ -229,7 +229,7 @@ export function renderXPLineChart(xpData) {
         label.setAttribute('y', yAxisPositions[index] + 5);
         label.setAttribute('text-anchor', 'end');
         label.setAttribute('font-size', '10');
-        label.setAttribute('fill', '#333');
+        label.setAttribute('fill', '#fff');
         label.textContent = formatXP(val);
         lineSvg.appendChild(label);
     });
@@ -240,7 +240,7 @@ export function renderXPLineChart(xpData) {
     xAxisLine.setAttribute('y1', height - margin);
     xAxisLine.setAttribute('x2', width - margin);
     xAxisLine.setAttribute('y2', height - margin);
-    xAxisLine.setAttribute('stroke', '#333');
+    xAxisLine.setAttribute('stroke', '#fff');
     xAxisLine.setAttribute('stroke-width', '1');
     lineSvg.appendChild(xAxisLine);
     
@@ -249,7 +249,7 @@ export function renderXPLineChart(xpData) {
     yAxisLine.setAttribute('y1', margin);
     yAxisLine.setAttribute('x2', margin);
     yAxisLine.setAttribute('y2', height - margin);
-    yAxisLine.setAttribute('stroke', '#333');
+    yAxisLine.setAttribute('stroke', '#fff');
     yAxisLine.setAttribute('stroke-width', '1');
     lineSvg.appendChild(yAxisLine);
 }
@@ -296,7 +296,7 @@ export function renderRadarChart(skillData) {
         circle.setAttribute('cy', centerY);
         circle.setAttribute('r', levelRadius);
         circle.setAttribute('fill', 'none');
-        circle.setAttribute('stroke', '#ccc');
+        circle.setAttribute('stroke', '#fff');
         circle.setAttribute('stroke-width', '0.5');
         radarSvg.appendChild(circle);
     }
@@ -313,7 +313,7 @@ export function renderRadarChart(skillData) {
         axisLine.setAttribute('y1', centerY);
         axisLine.setAttribute('x2', x);
         axisLine.setAttribute('y2', y);
-        axisLine.setAttribute('stroke', '#ccc');
+        axisLine.setAttribute('stroke', '#fff');
         axisLine.setAttribute('stroke-width', '0.5');
         radarSvg.appendChild(axisLine);
 
@@ -327,7 +327,7 @@ export function renderRadarChart(skillData) {
         label.setAttribute('y', labelY);
         label.setAttribute('text-anchor', 'middle');
         label.setAttribute('font-size', '12');
-        label.setAttribute('fill', '#333');
+        label.setAttribute('fill', '#fff');
         label.textContent = skillLabels[i];
         radarSvg.appendChild(label);
     }
