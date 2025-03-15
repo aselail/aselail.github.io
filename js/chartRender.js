@@ -3,7 +3,8 @@ import { formatXP } from "./data.js";
 // Function to render the transaction bar chart
 export function renderTransactionBarChart(up, down) {
     const barSvg = document.getElementById('transactionBarChart');
-    const width = 400, height = 300, padding = 50;
+    const width = barSvg.clientWidth, height = barSvg.clientHeight;
+    const padding = 50;
     const barWidth = (width - 2 * padding) / 2;
     const maxBarHeight = height - 2 * padding;
     const total = Math.max(up, down);
@@ -138,15 +139,14 @@ export function renderXPLineChart(xpData) {
     xpData.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
     // Define SVG dimensions and margins
-    const width = 500, height = 300, margin = 50;
+    const lineSvg = document.getElementById('xpLineChart');
+    const width = lineSvg.clientWidth, height = lineSvg.clientHeight;
+    const margin = 50;
     const chartWidth = width - 2 * margin;
     const chartHeight = height - 2 * margin;
     
-    // Select the SVG container and clear previous content
-    const lineSvg = document.getElementById('xpLineChart');
+    // Clear previous content
     lineSvg.innerHTML = "";
-    lineSvg.setAttribute('width', width);
-    lineSvg.setAttribute('height', height);
     
     // Determine minimum and maximum XP values
     const amounts = xpData.map(d => d.amount);
@@ -273,16 +273,14 @@ export function renderRadarChart(skillData) {
     const maxValue = Math.max(...skillAmounts);
 
     // Radar chart dimensions and center
-    const size = 400; // width and height of the SVG
+    const radarSvg = document.getElementById('skillsRadarChart');
+    const size = Math.min(radarSvg.clientWidth, radarSvg.clientHeight);
     const centerX = size / 2;
     const centerY = size / 2;
     const chartRadius = size / 2 - 40; // leave some margin for labels
 
-    // Select the SVG container and clear previous content
-    const radarSvg = document.getElementById('skillsRadarChart');
+    // Clear previous content
     radarSvg.innerHTML = "";
-    radarSvg.setAttribute('width', size);
-    radarSvg.setAttribute('height', size);
 
     const numAxes = skillLabels.length;
     const angleSlice = (Math.PI * 2) / numAxes;

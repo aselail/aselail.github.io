@@ -197,7 +197,7 @@ h1 {
 
 .xp-chart-container {
   width: 100%;
-  height: 100%;
+  height: auto;
   background-color: var(--box-color);
   padding: 20px;
   border-radius: 8px;
@@ -210,31 +210,29 @@ h1 {
   margin-bottom: 298px;
 }
 
-
 .chart-container h3 {
   color: var(--primary-color);
   margin-bottom: 15px;
 }
 
-#renderRadarChart {
-  width: 53%;
-  height: auto;
-}
-
-#transactionBarChart {
-  width: 53%;
-  height: auto;
-}
-
+#renderRadarChart,
+#transactionBarChart,
 #xpLineChart {
-  width: 72%;
-  height: 85%;
-  margin: auto;
+  width: 100%;
+  height: auto;
 }
 
 /* ========== RESPONSIVE DESIGN ========== */
 @media (max-width: 768px) {
   .charts {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .skill-chart-container,
+  .audit-chart-container,
+  .xp-chart-container {
+    width: 100%;
+    margin-bottom: 20px;
   }
 }
