@@ -351,7 +351,6 @@ export function renderRadarChart(skillData) {
     polygon.setAttribute('stroke-width', '2');
     radarSvg.appendChild(polygon);
     
-    // Generate a legend below the radar chart similar to the old skills pie chart.
     const skillsLegendDiv = document.getElementById('skillsLegend');
     skillsLegendDiv.innerHTML = ""; // clear previous legend content
     skillsLegendDiv.style.display = 'flex';

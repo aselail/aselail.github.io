@@ -1,12 +1,12 @@
 /* ========== GLOBAL MODERN THEME ========== */
 :root {
-  --primary-color: #007bff;       /* Blue */
-  --secondary-color: #f8f9fa;     /* Light Gray Background */
-  --accent-color: #dc3545;        /* Red for Alerts */
-  --text-color: #212529;          /* Dark Text */
+  --primary-color: #000;       
+  --secondary-color: #333537;     
+  --accent-color: #e43a4b;        
+  --text-color: #fff;          
   --font-family: 'Helvetica Neue', Helvetica, sans-serif;
   --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --box-color: #ffffff;
+  --box-color: #595656;
 }
 
 /* RESET */
@@ -208,6 +208,11 @@ h1 {
   justify-content: center;
   display: flex;
   margin-bottom: 298px;
+}
+
+.xp-chart-container #xpLineChart {
+  width: 100%;
+  height: 100%;
 }
 
 .chart-container h3 {
