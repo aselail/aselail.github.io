@@ -209,7 +209,7 @@ h1 {
   box-shadow: var(--box-shadow);
   text-align: center;
   grid-column: 2;
-  grid-row: 1;
+  grid-row: 2;
 }
 
 #xpLineChart {
