@@ -1,0 +1,17 @@
+# graphql-website
+
+The project is hosted at github pages
+
+https://aselail.github.io/
+
+use your username and password to Reboot01 to login
+
+The project will show details of the user
+
+and three diffferent graphs
+
+1. Skill Graph - shows the skills of the user in radar type graph
+
+2. Xp Graph - shows the experience of the user in line type graph
+
+3. Audit ratio - shows the audit ratio of the user in trasaction bar type graph
