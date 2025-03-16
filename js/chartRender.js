@@ -69,15 +69,14 @@ export function renderXPLineChart(xpData) {
     xpData.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
     // Define SVG dimensions and margins
-    const width = 500, height = 300, margin = 50;
+    const lineSvg = document.getElementById('xpLineChart');
+    const width = lineSvg.clientWidth, height = lineSvg.clientHeight;
+    const margin = 50;
     const chartWidth = width - 2 * margin;
     const chartHeight = height - 2 * margin;
     
-    // Select the SVG container and clear previous content
-    const lineSvg = document.getElementById('xpLineChart');
+    // Clear previous content
     lineSvg.innerHTML = "";
-    lineSvg.setAttribute('width', width);
-    lineSvg.setAttribute('height', height);
     
     // Determine minimum and maximum XP values
     const amounts = xpData.map(d => d.amount);
@@ -103,7 +102,7 @@ export function renderXPLineChart(xpData) {
     const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
     polyline.setAttribute('points', points);
     polyline.setAttribute('fill', 'none');
-    polyline.setAttribute('stroke', '#007bff');
+    polyline.setAttribute('stroke', '#fff');
     polyline.setAttribute('stroke-width', '2');
     lineSvg.appendChild(polyline);
     
@@ -115,7 +114,7 @@ export function renderXPLineChart(xpData) {
         circle.setAttribute('cx', cx);
         circle.setAttribute('cy', cy);
         circle.setAttribute('r', 4);
-        circle.setAttribute('fill', '#007bff');
+        circle.setAttribute('fill', '#fff');
         lineSvg.appendChild(circle);
         
         const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -123,7 +122,7 @@ export function renderXPLineChart(xpData) {
         text.setAttribute('y', cy - 8);
         text.setAttribute('text-anchor', 'middle');
         text.setAttribute('font-size', '10');
-        text.setAttribute('fill', '#333');
+        text.setAttribute('fill', '#fff');
         text.textContent = formatXP(d.amount);
         lineSvg.appendChild(text);
     });
@@ -145,7 +144,7 @@ export function renderXPLineChart(xpData) {
         label.setAttribute('y', height - margin + 20);
         label.setAttribute('text-anchor', 'middle');
         label.setAttribute('font-size', '10');
-        label.setAttribute('fill', '#333');
+        label.setAttribute('fill', '#fff');
         label.textContent = date.toLocaleDateString();
         lineSvg.appendChild(label);
     });
@@ -160,7 +159,7 @@ export function renderXPLineChart(xpData) {
         label.setAttribute('y', yAxisPositions[index] + 5);
         label.setAttribute('text-anchor', 'end');
         label.setAttribute('font-size', '10');
-        label.setAttribute('fill', '#333');
+        label.setAttribute('fill', '#fff');
         label.textContent = formatXP(val);
         lineSvg.appendChild(label);
     });
@@ -171,7 +170,7 @@ export function renderXPLineChart(xpData) {
     xAxisLine.setAttribute('y1', height - margin);
     xAxisLine.setAttribute('x2', width - margin);
     xAxisLine.setAttribute('y2', height - margin);
-    xAxisLine.setAttribute('stroke', '#333');
+    xAxisLine.setAttribute('stroke', '#fff');
     xAxisLine.setAttribute('stroke-width', '1');
     lineSvg.appendChild(xAxisLine);
     
@@ -180,7 +179,7 @@ export function renderXPLineChart(xpData) {
     yAxisLine.setAttribute('y1', margin);
     yAxisLine.setAttribute('x2', margin);
     yAxisLine.setAttribute('y2', height - margin);
-    yAxisLine.setAttribute('stroke', '#333');
+    yAxisLine.setAttribute('stroke', '#fff');
     yAxisLine.setAttribute('stroke-width', '1');
     lineSvg.appendChild(yAxisLine);
 }
