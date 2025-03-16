@@ -1,4 +1,4 @@
-import { formatXP } from "./data.js";
+import { formatXP } from "./pulldata.js";
 
 // Function to render the transaction bar chart
 export function renderTransactionBarChart(up, down) {

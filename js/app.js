@@ -1,4 +1,4 @@
-import { login } from "./login.js";
+import { login } from "./auth.js";
 import { profile } from "./profile.js";
 
 const jwt = localStorage.getItem('authToken');

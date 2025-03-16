@@ -1,5 +1,5 @@
-import {pullData} from "./data.js";
-import {logout} from "./logout.js";
+import {pullData} from "./pulldata.js";
+import {logout} from "./auth.js";
 import { renderTransactionBarChart, renderRadarChart , renderXPLineChart} from "./chartRender.js";
 
 export async function profile() {
