@@ -70,7 +70,8 @@ export function renderXPLineChart(xpData) {
 
     // Define SVG dimensions and margins
     const lineSvg = document.getElementById('xpLineChart');
-    const width = lineSvg.clientWidth, height = lineSvg.clientHeight;
+    const width = lineSvg.clientWidth,
+          height = lineSvg.clientHeight;
     const margin = 50;
     const chartWidth = width - 2 * margin;
     const chartHeight = height - 2 * margin;
@@ -87,7 +88,7 @@ export function renderXPLineChart(xpData) {
     const timeStart = new Date(xpData[0].createdAt).getTime();
     const timeEnd = new Date(xpData[xpData.length - 1].createdAt).getTime();
     
-    // Scale functions: x maps date to horizontal position; y maps XP to vertical position (inverted)
+    // Scale functions: x maps time to horizontal position; y maps XP (inverted)
     const xScale = (date) => {
         const t = new Date(date).getTime();
         return margin + ((t - timeStart) / (timeEnd - timeStart)) * chartWidth;
@@ -96,6 +97,7 @@ export function renderXPLineChart(xpData) {
         return margin + chartHeight - ((xp - minXP) / (maxXP - minXP)) * chartHeight;
     };
 
+    // --- Draw Background Grid and Axes (in white) ---
     
     // Draw horizontal grid lines
     const gridCount = 5;
@@ -106,22 +108,20 @@ export function renderXPLineChart(xpData) {
         hLine.setAttribute('y1', y);
         hLine.setAttribute('x2', width - margin);
         hLine.setAttribute('y2', y);
-        hLine.setAttribute('stroke', '#007bff');  // blue grid lines
+        hLine.setAttribute('stroke', '#ffffff');
         hLine.setAttribute('stroke-width', '0.5');
-        hLine.setAttribute('stroke-dasharray', '3,3');  // dashed line for clarity
+        hLine.setAttribute('stroke-dasharray', '3,3');
         lineSvg.appendChild(hLine);
     }
     
-    // Prepare vertical grid lines by month
+    // Create vertical grid lines by month
     const gridDates = [];
     let currentDate = new Date(timeStart);
-    currentDate.setDate(1); // reset day to first of month
+    currentDate.setDate(1); // set date to first of month
     while (currentDate.getTime() <= timeEnd) {
         gridDates.push(new Date(currentDate));
-        // increment month
         currentDate.setMonth(currentDate.getMonth() + 1);
     }
-    
     gridDates.forEach(date => {
         const x = xScale(date);
         const vLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
@@ -129,34 +129,67 @@ export function renderXPLineChart(xpData) {
         vLine.setAttribute('y1', margin);
         vLine.setAttribute('x2', x);
         vLine.setAttribute('y2', height - margin);
-        vLine.setAttribute('stroke', '#007bff'); // blue grid lines
+        vLine.setAttribute('stroke', '#ffffff');
         vLine.setAttribute('stroke-width', '0.5');
         vLine.setAttribute('stroke-dasharray', '3,3');
         lineSvg.appendChild(vLine);
         
-        // Add month label
+        // Add month label (in white)
         const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         label.setAttribute('x', x);
         label.setAttribute('y', height - margin + 20);
         label.setAttribute('text-anchor', 'middle');
         label.setAttribute('font-size', '10');
-        label.setAttribute('fill', '#007bff');
+        label.setAttribute('fill', '#ffffff');
         label.textContent = date.toLocaleString('default', { month: 'short', year: 'numeric' });
         lineSvg.appendChild(label);
     });
     
-    // --- Draw XP Line and Data Points ---
+    // Draw axes lines (white)
+    const xAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    xAxisLine.setAttribute('x1', margin);
+    xAxisLine.setAttribute('y1', height - margin);
+    xAxisLine.setAttribute('x2', width - margin);
+    xAxisLine.setAttribute('y2', height - margin);
+    xAxisLine.setAttribute('stroke', '#ffffff');
+    xAxisLine.setAttribute('stroke-width', '1');
+    lineSvg.appendChild(xAxisLine);
     
-    // Construct the polyline points from the XP data
+    const yAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    yAxisLine.setAttribute('x1', margin);
+    yAxisLine.setAttribute('y1', margin);
+    yAxisLine.setAttribute('x2', margin);
+    yAxisLine.setAttribute('y2', height - margin);
+    yAxisLine.setAttribute('stroke', '#ffffff');
+    yAxisLine.setAttribute('stroke-width', '1');
+    lineSvg.appendChild(yAxisLine);
+    
+    // Add y-axis labels for min and max XP values (formatted in MB/KB/B and white)
+    const yAxisValues = [maxXP, minXP];
+    const yAxisPositions = [yScale(maxXP), yScale(minXP)];
+    yAxisValues.forEach((val, index) => {
+        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        label.setAttribute('x', margin - 10);
+        label.setAttribute('y', yAxisPositions[index] + 5);
+        label.setAttribute('text-anchor', 'end');
+        label.setAttribute('font-size', '10');
+        label.setAttribute('fill', '#ffffff');
+        label.textContent = formatXP(val);
+        lineSvg.appendChild(label);
+    });
+    
+    // --- Draw XP Data Line and Points (in blue) ---
+    
+    // Construct the polyline points from XP data
     const points = xpData.map(d => `${xScale(d.createdAt)},${yScale(d.amount)}`).join(" ");
     const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
     polyline.setAttribute('points', points);
     polyline.setAttribute('fill', 'none');
-    polyline.setAttribute('stroke', '#007bff');  // blue line
+    polyline.setAttribute('stroke', '#007bff');  // blue data line
     polyline.setAttribute('stroke-width', '2');
     lineSvg.appendChild(polyline);
     
-    // Plot circles and XP labels for each data point in blue
+    // Draw data points and their labels (using formatted XP values)
     xpData.forEach(d => {
         const cx = xScale(d.createdAt);
         const cy = yScale(d.amount);
@@ -173,42 +206,8 @@ export function renderXPLineChart(xpData) {
         text.setAttribute('text-anchor', 'middle');
         text.setAttribute('font-size', '10');
         text.setAttribute('fill', '#007bff');
-        // Optional: format xp amount using your formatXP helper if desired
-        text.textContent = d.amount;
+        text.textContent = formatXP(d.amount);
         lineSvg.appendChild(text);
-    });
-    
-    // --- Optional: Draw Axes for Clarity ---
-    const xAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    xAxisLine.setAttribute('x1', margin);
-    xAxisLine.setAttribute('y1', height - margin);
-    xAxisLine.setAttribute('x2', width - margin);
-    xAxisLine.setAttribute('y2', height - margin);
-    xAxisLine.setAttribute('stroke', '#007bff');
-    xAxisLine.setAttribute('stroke-width', '1');
-    lineSvg.appendChild(xAxisLine);
-    
-    const yAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    yAxisLine.setAttribute('x1', margin);
-    yAxisLine.setAttribute('y1', margin);
-    yAxisLine.setAttribute('x2', margin);
-    yAxisLine.setAttribute('y2', height - margin);
-    yAxisLine.setAttribute('stroke', '#007bff');
-    yAxisLine.setAttribute('stroke-width', '1');
-    lineSvg.appendChild(yAxisLine);
-    
-    // Add y-axis labels (for min and max XP)
-    const yAxisValues = [maxXP, minXP];
-    const yAxisPositions = [yScale(maxXP), yScale(minXP)];
-    yAxisValues.forEach((val, index) => {
-        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        label.setAttribute('x', margin - 10);
-        label.setAttribute('y', yAxisPositions[index] + 5);
-        label.setAttribute('text-anchor', 'end');
-        label.setAttribute('font-size', '10');
-        label.setAttribute('fill', '#007bff');
-        label.textContent = val;
-        lineSvg.appendChild(label);
     });
 }
 
