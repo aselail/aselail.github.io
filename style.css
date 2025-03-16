@@ -160,7 +160,7 @@ h1 {
 }
 
 .profile-info strong {
-  color: var(--accent-color);
+  color: #000;
 }
 
 /* ========== CHART SECTION ========== */
