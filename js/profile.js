@@ -1,6 +1,6 @@
 import {pullData} from "./data.js";
 import {logout} from "./logout.js";
-import { renderAuditHorizontalBarChart, renderRadarChart , renderXPLineChart} from "./chartRender.js";
+import { renderTransactionBarChart, renderRadarChart , renderXPLineChart} from "./chartRender.js";
 
 export async function profile() {
     try {
@@ -48,11 +48,11 @@ export async function profile() {
                     </div>
                     <div class="xp-chart-container">
                     <h3>XP Line Chart</h3>
-                    <svg id="xpLineChart" width="400" height="300"></svg>
+                    <svg id="xpLineChart" width="400" height="300></svg>
                 </section>
             </div>
         `;
-        renderAuditHorizontalBarChart(user.totalUp, user.totalDown);
+        renderTransactionBarChart(user.totalUp, user.totalDown);
         renderRadarChart(skillsData);
         renderXPLineChart(xpData);
     } catch (error) {
@@ -113,4 +113,3 @@ const skillQury = `
         }
     }
 `;
-enderA
