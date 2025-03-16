@@ -286,23 +286,20 @@ export function renderRadarChart(skillData) {
     skillsLegendDiv.style.marginTop = '10px';
     
     for (let i = 0; i < numAxes; i++) {
-        // Use a color scale similar to pie chart slices.
-        const color = `hsl(${(i / numAxes) * 360}, 70%, 50%)`;
         const legendItem = document.createElement('div');
         legendItem.style.display = 'flex';
         legendItem.style.alignItems = 'center';
         legendItem.style.marginBottom = '5px';
         
-        const legendColor = document.createElement('span');
-        legendColor.style.width = '20px';
-        legendColor.style.height = '20px';
-        legendColor.style.backgroundColor = color;
-        legendColor.style.marginRight = '10px';
+        const numberIndicator = document.createElement('span');
+        numberIndicator.textContent = (i + 1) + '.';
+        numberIndicator.style.marginRight = '10px';
+        numberIndicator.style.fontWeight = 'bold';
         
         const legendText = document.createElement('span');
         legendText.textContent = `${skillLabels[i]}: ${skillAmounts[i]}`;
         
-        legendItem.appendChild(legendColor);
+        legendItem.appendChild(numberIndicator);
         legendItem.appendChild(legendText);
         skillsLegendDiv.appendChild(legendItem);
     }
