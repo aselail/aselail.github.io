@@ -1,6 +1,6 @@
 import {pullData} from "./data.js";
 import {logout} from "./logout.js";
-import { renderTransactionBarChart, renderRadarChart , renderXPLineChart} from "./chartRender.js";
+import { renderAuditHorizontalBarChart, renderRadarChart , renderXPLineChart} from "./chartRender.js";
 
 export async function profile() {
     try {
@@ -52,7 +52,7 @@ export async function profile() {
                 </section>
             </div>
         `;
-        renderTransactionBarChart(user.totalUp, user.totalDown);
+        renderAuditHorizontalBarChart(user.totalUp, user.totalDown);
         renderRadarChart(skillsData);
         renderXPLineChart(xpData);
     } catch (error) {
@@ -113,3 +113,4 @@ const skillQury = `
         }
     }
 `;
+enderA

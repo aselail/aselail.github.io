@@ -307,3 +307,61 @@ export function renderRadarChart(skillData) {
         skillsLegendDiv.appendChild(legendItem);
     }
 }
+
+export function renderAuditHorizontalBarChart(up, down) {
+    const svg = document.getElementById('transactionBarChart');
+    const width = svg.clientWidth;
+    const height = svg.clientHeight;
+    svg.innerHTML = "";
+    
+    // Set margins and bar sizing
+    const leftMargin = 50; // for labels
+    const rightMargin = 20;
+    const topMargin = 40;
+    const barHeight = 40;
+    const spacing = 20;
+    const maxBarWidth = width - leftMargin - rightMargin;
+    
+    // Find the maximum to scale the widths
+    const total = Math.max(up, down);
+    
+    // Calculate widths proportionally
+    const upBarWidth = (up / total) * maxBarWidth;
+    const downBarWidth = (down / total) * maxBarWidth;
+    
+    // Draw the 'Done' (up) bar
+    const upBar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    upBar.setAttribute('x', leftMargin);
+    upBar.setAttribute('y', topMargin);
+    upBar.setAttribute('width', upBarWidth);
+    upBar.setAttribute('height', barHeight);
+    upBar.setAttribute('fill', '#4649bd'); // blue color
+    svg.appendChild(upBar);
+    
+    // Add label for Done value (placed at the end of the bar)
+    const upLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    upLabel.setAttribute('x', leftMargin + upBarWidth + 5);
+    upLabel.setAttribute('y', topMargin + barHeight / 2 + 5);
+    upLabel.setAttribute('font-size', '14');
+    upLabel.setAttribute('fill', '#28a745'); // green color for text
+    upLabel.textContent = 'Done: ' + up;
+    svg.appendChild(upLabel);
+    
+    // Draw the 'Received' (down) bar
+    const downBar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    downBar.setAttribute('x', leftMargin);
+    downBar.setAttribute('y', topMargin + barHeight + spacing);
+    downBar.setAttribute('width', downBarWidth);
+    downBar.setAttribute('height', barHeight);
+    downBar.setAttribute('fill', '#f95151'); // red color
+    svg.appendChild(downBar);
+    
+    // Add label for Received value
+    const downLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    downLabel.setAttribute('x', leftMargin + downBarWidth + 5);
+    downLabel.setAttribute('y', topMargin + barHeight + spacing + barHeight / 2 + 5);
+    downLabel.setAttribute('font-size', '14');
+    downLabel.setAttribute('fill', '#ff8800'); // orange color for text
+    downLabel.textContent = 'Received: ' + down;
+    svg.appendChild(downLabel);
+}
