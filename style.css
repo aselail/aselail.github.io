@@ -174,7 +174,7 @@ h1 {
 
 .skill-chart-container {
   min-width: 300px;
-  background-color: var(--box-color);
+  background-color: #6a6666;
   padding: 20px;
   border-radius: 8px;
   box-shadow: var(--box-shadow);
@@ -186,7 +186,7 @@ h1 {
 .audit-chart-container {
   min-width: 300px;
   height: fit-content;
-  background-color: var(--box-color);
+  background-color: #6a6666;
   padding: 20px;
   border-radius: 8px;
   box-shadow: var(--box-shadow);
@@ -203,7 +203,7 @@ h1 {
 .xp-chart-container {
   min-width: 300px;
   height: fit-content;
-  background-color: var(--box-color);
+  background-color: #6a6666;
   padding: 20px;
   border-radius: 8px;
   box-shadow: var(--box-shadow);
