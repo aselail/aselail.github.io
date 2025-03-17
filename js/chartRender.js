@@ -106,7 +106,7 @@ export function renderXPLineChart(xpData) {
         const hLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         hLine.setAttribute('x1', margin);
         hLine.setAttribute('y1', y);
-        hLine.setAttribute('x2', width - margin);
+        hLine.setAttribute('x2', margin + chartWidth);
         hLine.setAttribute('y2', y);
         hLine.setAttribute('stroke', '#ffffff');
         hLine.setAttribute('stroke-width', '0.5');
@@ -128,7 +128,7 @@ export function renderXPLineChart(xpData) {
         vLine.setAttribute('x1', x);
         vLine.setAttribute('y1', margin);
         vLine.setAttribute('x2', x);
-        vLine.setAttribute('y2', height - margin);
+        vLine.setAttribute('y2', margin + chartHeight);
         vLine.setAttribute('stroke', '#ffffff');
         vLine.setAttribute('stroke-width', '0.5');
         vLine.setAttribute('stroke-dasharray', '3,3');
@@ -149,9 +149,9 @@ export function renderXPLineChart(xpData) {
     // Draw axes lines (white)
     const xAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     xAxisLine.setAttribute('x1', margin);
-    xAxisLine.setAttribute('y1', height - margin);
-    xAxisLine.setAttribute('x2', width - margin);
-    xAxisLine.setAttribute('y2', height - margin);
+    xAxisLine.setAttribute('y1', height - chartHeight);
+    xAxisLine.setAttribute('x2', width - chartWidth);
+    xAxisLine.setAttribute('y2', height - chartHeight);
     xAxisLine.setAttribute('stroke', '#ffffff');
     xAxisLine.setAttribute('stroke-width', '1');
     lineSvg.appendChild(xAxisLine);
@@ -160,7 +160,7 @@ export function renderXPLineChart(xpData) {
     yAxisLine.setAttribute('x1', margin);
     yAxisLine.setAttribute('y1', margin);
     yAxisLine.setAttribute('x2', margin);
-    yAxisLine.setAttribute('y2', height - margin);
+    yAxisLine.setAttribute('y2', margin + chartHeight);
     yAxisLine.setAttribute('stroke', '#ffffff');
     yAxisLine.setAttribute('stroke-width', '1');
     lineSvg.appendChild(yAxisLine);
