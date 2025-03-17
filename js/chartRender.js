@@ -146,7 +146,7 @@ export function renderXPLineChart(xpData) {
       const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       label.setAttribute('x', x);
       // Use margin + chartHeight (bottom axis) + small offset
-      label.setAttribute('y', margin + chartHeight);
+      label.setAttribute('y', margin + chartHeight + 20);
       label.setAttribute('text-anchor', 'middle');
       label.setAttribute('font-size', '10');
       label.setAttribute('fill', '#ffffff');
