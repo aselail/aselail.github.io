@@ -137,10 +137,11 @@ export function renderXPLineChart(xpData) {
         // Add month label (in white)
         const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         label.setAttribute('x', x);
-        label.setAttribute('y', height - margin + 20);
+        label.setAttribute('y', height - margin + 15);
         label.setAttribute('text-anchor', 'middle');
         label.setAttribute('font-size', '10');
         label.setAttribute('fill', '#ffffff');
+        label.setAttribute('style', 'writing-mode: vertical-lr; text-orientation: mixed;');
         label.textContent = date.toLocaleString('default', { month: 'short', year: 'numeric' });
         lineSvg.appendChild(label);
     });
