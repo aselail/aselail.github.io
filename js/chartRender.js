@@ -65,96 +65,39 @@ export function renderTransactionBarChart(up, down) {
 export function renderXPLineChart(xpData) {
     if (!xpData || xpData.length === 0) return;
     
-    // Sort data
+    // Sort data by date
     xpData.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-  
-    // SVG and margins
+
+    // SVG dimensions and margins
     const lineSvg = document.getElementById('xpLineChart');
     const width = lineSvg.clientWidth;
     const height = lineSvg.clientHeight;
     const margin = 50;
     const chartWidth = width - 2 * margin;
     const chartHeight = height - 2 * margin;
-  
-    // Clear previous
+    
+    // Clear previous content
     lineSvg.innerHTML = "";
-  
-    // DEBUG rectangle to see the chart area
-    const debugRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    debugRect.setAttribute('x', margin);
-    debugRect.setAttribute('y', margin);
-    debugRect.setAttribute('width', chartWidth);
-    debugRect.setAttribute('height', chartHeight);
-    debugRect.setAttribute('fill', 'none');
-    debugRect.setAttribute('stroke', 'red');
-    lineSvg.appendChild(debugRect);
-  
-    // Min / max XP
+    
+    // Determine min/max XP values
     const amounts = xpData.map(d => d.amount);
     const minXP = Math.min(...amounts);
     const maxXP = Math.max(...amounts);
-  
-    // Time range
+    
+    // Time range from first to last data points
     const timeStart = new Date(xpData[0].createdAt).getTime();
     const timeEnd = new Date(xpData[xpData.length - 1].createdAt).getTime();
-  
-    // xScale, yScale
+    
+    // Scale functions: mapping time to x and XP to y positions
     const xScale = (date) => {
-      const t = new Date(date).getTime();
-      return margin + ((t - timeStart) / (timeEnd - timeStart)) * chartWidth;
+        const t = new Date(date).getTime();
+        return margin + ((t - timeStart) / (timeEnd - timeStart)) * chartWidth;
     };
     const yScale = (xp) => {
-      return margin + chartHeight - ((xp - minXP) / (maxXP - minXP)) * chartHeight;
+        return margin + chartHeight - ((xp - minXP) / (maxXP - minXP)) * chartHeight;
     };
-  
-    // Horizontal grid
-    const gridCount = 5;
-    for (let i = 0; i <= gridCount; i++) {
-      const y = margin + i * (chartHeight / gridCount);
-      const hLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      hLine.setAttribute('x1', margin);
-      hLine.setAttribute('y1', y);
-      hLine.setAttribute('x2', margin + chartWidth);
-      hLine.setAttribute('y2', y);
-      hLine.setAttribute('stroke', '#ffffff');
-      hLine.setAttribute('stroke-width', '0.5');
-      hLine.setAttribute('stroke-dasharray', '3,3');
-      lineSvg.appendChild(hLine);
-    }
-  
-    // Vertical grid (monthly)
-    const gridDates = [];
-    let currentDate = new Date(timeStart);
-    currentDate.setDate(1);
-    while (currentDate.getTime() <= timeEnd) {
-      gridDates.push(new Date(currentDate));
-      currentDate.setMonth(currentDate.getMonth() + 1);
-    }
-    gridDates.forEach(date => {
-      const x = xScale(date);
-      const vLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      vLine.setAttribute('x1', x);
-      vLine.setAttribute('y1', margin);
-      vLine.setAttribute('x2', x);
-      vLine.setAttribute('y2', margin + chartHeight);
-      vLine.setAttribute('stroke', '#ffffff');
-      vLine.setAttribute('stroke-width', '0.5');
-      vLine.setAttribute('stroke-dasharray', '3,3');
-      lineSvg.appendChild(vLine);
-  
-      // Month label (adjusted to stay near or just below x-axis)
-      const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      label.setAttribute('x', x);
-      // Use margin + chartHeight (bottom axis) + small offset
-      label.setAttribute('y', margin + chartHeight + 20);
-      label.setAttribute('text-anchor', 'middle');
-      label.setAttribute('font-size', '10');
-      label.setAttribute('fill', '#ffffff');
-      label.setAttribute('style', 'writing-mode: vertical-lr; text-orientation: mixed;');
-      label.textContent = date.toLocaleString('default', { month: 'short', year: 'numeric' });
-      lineSvg.appendChild(label);
-    });
-  
+    
+    // --- Draw Axes (in white) ---
     // X-axis
     const xAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     xAxisLine.setAttribute('x1', margin);
@@ -162,8 +105,9 @@ export function renderXPLineChart(xpData) {
     xAxisLine.setAttribute('x2', margin + chartWidth);
     xAxisLine.setAttribute('y2', margin + chartHeight);
     xAxisLine.setAttribute('stroke', '#ffffff');
+    xAxisLine.setAttribute('stroke-width', '1');
     lineSvg.appendChild(xAxisLine);
-  
+
     // Y-axis
     const yAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     yAxisLine.setAttribute('x1', margin);
@@ -171,23 +115,24 @@ export function renderXPLineChart(xpData) {
     yAxisLine.setAttribute('x2', margin);
     yAxisLine.setAttribute('y2', margin + chartHeight);
     yAxisLine.setAttribute('stroke', '#ffffff');
+    yAxisLine.setAttribute('stroke-width', '1');
     lineSvg.appendChild(yAxisLine);
-  
-    // Min / max XP labels
-    const yAxisValues = [maxXP, minXP];
-    const yAxisPositions = [yScale(maxXP), yScale(minXP)];
-    yAxisValues.forEach((val, index) => {
+    
+    // Y-axis labels (formatted XP values)
+    [maxXP, minXP].forEach((val, index) => {
+      const yPos = index === 0 ? yScale(maxXP) : yScale(minXP);
       const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       label.setAttribute('x', margin - 10);
-      label.setAttribute('y', yAxisPositions[index] + 5);
+      label.setAttribute('y', yPos + 5);
       label.setAttribute('text-anchor', 'end');
       label.setAttribute('font-size', '10');
       label.setAttribute('fill', '#ffffff');
       label.textContent = formatXP(val);
       lineSvg.appendChild(label);
     });
-  
-    // Draw the data line
+    
+    // --- Draw XP Data (line, points, labels in blue) ---
+    // Data polyline
     const points = xpData.map(d => `${xScale(d.createdAt)},${yScale(d.amount)}`).join(" ");
     const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
     polyline.setAttribute('points', points);
@@ -195,30 +140,31 @@ export function renderXPLineChart(xpData) {
     polyline.setAttribute('stroke', '#007bff');
     polyline.setAttribute('stroke-width', '2');
     lineSvg.appendChild(polyline);
-  
-    // Draw data points + labels
+    
+    // Data points and labels
     xpData.forEach(d => {
-      const cx = xScale(d.createdAt);
-      const cy = yScale(d.amount);
-  
-      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      circle.setAttribute('cx', cx);
-      circle.setAttribute('cy', cy);
-      circle.setAttribute('r', 4);
-      circle.setAttribute('fill', '#007bff');
-      lineSvg.appendChild(circle);
-  
-      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      text.setAttribute('x', cx);
-      text.setAttribute('y', cy - 8);
-      text.setAttribute('text-anchor', 'middle');
-      text.setAttribute('font-size', '10');
-      text.setAttribute('fill', '#007bff');
-      text.textContent = formatXP(d.amount);
-      lineSvg.appendChild(text);
+        const cx = xScale(d.createdAt);
+        const cy = yScale(d.amount);
+        
+        // Data point
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', cx);
+        circle.setAttribute('cy', cy);
+        circle.setAttribute('r', 4);
+        circle.setAttribute('fill', '#007bff');
+        lineSvg.appendChild(circle);
+        
+        // XP value label (formatted)
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', cx);
+        text.setAttribute('y', cy - 8);
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('font-size', '10');
+        text.setAttribute('fill', '#007bff');
+        text.textContent = formatXP(d.amount);
+        lineSvg.appendChild(text);
     });
-  }
-  
+}
 
 export function renderRadarChart(skillData) {
     // Aggregate skills: for each skill type, use the maximum amount
