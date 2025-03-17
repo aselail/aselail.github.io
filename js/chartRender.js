@@ -153,7 +153,6 @@ export function renderXPLineChart(xpData) {
     xAxisLine.setAttribute('x2', margin + chartWidth);
     xAxisLine.setAttribute('y2', margin + chartHeight);
     xAxisLine.setAttribute('stroke', '#ffffff');
-    xAxisLine.setAttribute('stroke-width', '1');
     lineSvg.appendChild(xAxisLine);
     
     const yAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
@@ -162,7 +161,6 @@ export function renderXPLineChart(xpData) {
     yAxisLine.setAttribute('x2', margin);
     yAxisLine.setAttribute('y2', margin + chartHeight);
     yAxisLine.setAttribute('stroke', '#ffffff');
-    yAxisLine.setAttribute('stroke-width', '1');
     lineSvg.appendChild(yAxisLine);
     
     // Add y-axis labels for min and max XP values (formatted in MB/KB/B and white)
