@@ -102,7 +102,7 @@ export function renderXPLineChart(xpData) {
     const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
     polyline.setAttribute('points', points);
     polyline.setAttribute('fill', 'none');
-    polyline.setAttribute('stroke', '#fff');
+    polyline.setAttribute('stroke', '#0056f9');
     polyline.setAttribute('stroke-width', '2');
     lineSvg.appendChild(polyline);
     
@@ -114,7 +114,7 @@ export function renderXPLineChart(xpData) {
         circle.setAttribute('cx', cx);
         circle.setAttribute('cy', cy);
         circle.setAttribute('r', 4);
-        circle.setAttribute('fill', '#fff');
+        circle.setAttribute('fill', '#0056f9');
         lineSvg.appendChild(circle);
         
         const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
