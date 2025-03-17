@@ -131,6 +131,31 @@ export function renderXPLineChart(xpData) {
       lineSvg.appendChild(label);
     });
     
+    // --- Add Month Labels (rotated vertically) ---
+    // Create an array of dates representing the first day of each month
+    const gridDates = [];
+    let currentDate = new Date(timeStart);
+    currentDate.setDate(1); // reset date to 1st of month
+    while (currentDate.getTime() <= timeEnd) {
+        gridDates.push(new Date(currentDate));
+        currentDate.setMonth(currentDate.getMonth() + 1);
+    }
+    
+    gridDates.forEach(date => {
+        const x = xScale(date);
+        // Create a text element for the month label (rotated vertically)
+        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        label.setAttribute('x', x);
+        label.setAttribute('y', height - margin + 20);
+        label.setAttribute('font-size', '10');
+        label.setAttribute('fill', '#ffffff');
+        label.setAttribute('text-anchor', 'middle');
+        // Rotate the label -90 degrees about its (x,y) position
+        label.setAttribute('transform', `rotate(-90, ${x}, ${height - margin + 20})`);
+        label.textContent = date.toLocaleString('default', { month: 'short', year: 'numeric' });
+        lineSvg.appendChild(label);
+    });
+    
     // --- Draw XP Data (line, points, labels in blue) ---
     // Data polyline
     const points = xpData.map(d => `${xScale(d.createdAt)},${yScale(d.amount)}`).join(" ");
