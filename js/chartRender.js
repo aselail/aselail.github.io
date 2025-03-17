@@ -149,9 +149,9 @@ export function renderXPLineChart(xpData) {
     // Draw axes lines (white)
     const xAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     xAxisLine.setAttribute('x1', margin);
-    xAxisLine.setAttribute('y1', height - chartHeight);
-    xAxisLine.setAttribute('x2', width - chartWidth);
-    xAxisLine.setAttribute('y2', height - chartHeight);
+    xAxisLine.setAttribute('y1', margin + chartHeight);
+    xAxisLine.setAttribute('x2', margin + chartWidth);
+    xAxisLine.setAttribute('y2', margin + chartHeight);
     xAxisLine.setAttribute('stroke', '#ffffff');
     xAxisLine.setAttribute('stroke-width', '1');
     lineSvg.appendChild(xAxisLine);
